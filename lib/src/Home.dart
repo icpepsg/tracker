@@ -4,6 +4,8 @@ import 'customwidget/PageColor.dart';
 import 'customwidget/HomePageActivity.dart';
 import 'package:flutter/material.dart';
 
+import 'customwidget/Profile.dart';
+
 class Home extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -17,8 +19,8 @@ class _HomeState extends State<Home> {
 
   final List<Widget> _children = [
     HomePageActivity(),
-    PageColor(Colors.red[300]),
-    PageColor(Colors.blue[300]),
+    Profile(),
+    //PageColor(Colors.blue),
   ];
 
   @override

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'customwidget/CustomFormWidget.dart';
 import 'loginPage.dart';
-
+/*
+ Author : kelvin Co
+ */
 class Signup extends StatefulWidget {
   Signup({Key key, this.title}) : super(key: key);
   final String title;
@@ -61,10 +63,13 @@ class _SignupState extends State<Signup> {
   }
 
 
-
-
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width * 0.7;
+    double topPadding = MediaQuery.of(context).size.height * 0.1;
+    double topContent = MediaQuery.of(context).size.height * 0.2;
+    double midContent = MediaQuery.of(context).size.height * 0.5;
+    double botContent = MediaQuery.of(context).size.height * 0.2;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -73,20 +78,35 @@ class _SignupState extends State<Signup> {
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  SizedBox(
-                    height: 10,
+                  Container(
+
+                    height: topContent,
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: topPadding,
+                        ),
+                        _title(),
+                      ],
+                    )
+
+
                   ),
-                  _title(),
-                  SizedBox(
-                    height: 10,
+
+                  Container(
+                    height: midContent,
+                    width: width,
+                    child: CustomFormWidget(),
                   ),
-                  CustomFormWidget(),
-                  SizedBox(
-                    height: 10,
+
+                  Container(
+                  height: botContent,
+                  //alignment: Alignment.bottomCenter,
+                  child: _loginAccountLabel(),
                   ),
-                  _loginAccountLabel(),
+
                   /*                   _signUpFormdWidget(),
                     SizedBox(
                       height: 10,
