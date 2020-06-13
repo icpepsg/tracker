@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:tracker/src/common/Constants.dart';
 
 class HomePageActivity extends StatefulWidget {
   final Color color;
@@ -25,6 +26,12 @@ class _MyHomePageState extends State<HomePageActivity> {
 
   GoogleMapController _controller;
 
+  @override
+  void initState() {
+    super.initState();
+    getCurrentLocation();
+  }
+
   static final CameraPosition initialLocation = CameraPosition(
     target: LatLng(14.259504, 121.133800),
     zoom: 14.4746,
@@ -32,7 +39,7 @@ class _MyHomePageState extends State<HomePageActivity> {
   //default cameraposition
 
   Future<Uint8List> getMarker() async {
-    ByteData byteData = await DefaultAssetBundle.of(context).load("assets/images/direction.png");
+    ByteData byteData = await DefaultAssetBundle.of(context).load(Constants.IMG_ARROW);
     return byteData.buffer.asUint8List();
   }
   void updateMarkerAndCircle( LocationData newLocalData, Uint8List imageData) {
