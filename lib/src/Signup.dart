@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tracker/src/common/Constants.dart';
 import 'customwidget/CustomFormWidget.dart';
 import 'loginPage.dart';
 /*
@@ -22,8 +23,7 @@ class _SignupState extends State<Signup> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(
-            'Already have an account ?',
+          Text(Constants.TXT_LABEL_GOT_ACCOUNT,
             style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
           ),
           SizedBox(
@@ -34,12 +34,8 @@ class _SignupState extends State<Signup> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => LoginPage()));
             },
-            child: Text(
-              'Login',
-              style: TextStyle(
-                  color: Color(0xfff79c4f),
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600),
+            child: Text(Constants.TXT_BUTTON_LOGIN,
+              style: TextStyle(color: Colors.red, fontSize: 13, fontWeight: FontWeight.w600),
             ),
           )
         ],
@@ -51,17 +47,16 @@ class _SignupState extends State<Signup> {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-        text: 'Community Tracker',
+        text: Constants.TXT_APP_TITLE,
         style: GoogleFonts.courierPrime(
           textStyle: Theme.of(context).textTheme.display1,
           fontSize: 30,
-          fontWeight: FontWeight.w100,
-          color: Colors.green,
+          fontWeight: FontWeight.w700,
+          color: Colors.green[700],
         ),
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +70,7 @@ class _SignupState extends State<Signup> {
       body: SafeArea(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
-            child: SingleChildScrollView(
+ //           child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,36 +86,20 @@ class _SignupState extends State<Signup> {
                         _title(),
                       ],
                     )
-
-
                   ),
 
-                  Container(
+                  SizedBox(
                     height: midContent,
                     width: width,
                     child: CustomFormWidget(),
                   ),
-
                   Container(
                   height: botContent,
-                  //alignment: Alignment.bottomCenter,
                   child: _loginAccountLabel(),
                   ),
-
-                  /*                   _signUpFormdWidget(),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    _submitButton(),
-
-                    _loginAccountLabel(),
-*/                  ],
-
+                  ],
               ),
-            ),
-
-
-
+       //     ),
           )
       ),
     );

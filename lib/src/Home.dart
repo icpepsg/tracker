@@ -1,6 +1,4 @@
-
 import 'customwidget/ImageContainer.dart';
-import 'customwidget/PageColor.dart';
 import 'customwidget/HomePageActivity.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +18,6 @@ class _HomeState extends State<Home> {
   final List<Widget> _children = [
     HomePageActivity(),
     Profile(),
-    //PageColor(Colors.blue),
   ];
 
   @override
@@ -47,14 +44,14 @@ class _HomeState extends State<Home> {
         ),
       ),
       body: _children[_currentIndex], // new
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      /*floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: new FloatingActionButton(
         child: Icon(Icons.camera_alt),
         onPressed: () async{
 
 
         },
-      ),
+      ),*/
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex, // this will be set when a new tab is tapped
         selectedItemColor: Colors.black,

@@ -17,8 +17,6 @@ class CommonTextWidget extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-
-
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -36,10 +34,12 @@ class CommonTextWidget extends StatelessWidget {
             decoration: InputDecoration(
               hintText: title,
               contentPadding: EdgeInsets.symmetric(horizontal: 15),
-              border: InputBorder.none,
+              //border: InputBorder.none,
               fillColor: Colors.grey[200],
               filled: true,
-
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
             ),
             validator: evaluator,
           )

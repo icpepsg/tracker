@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:tracker/src/common/Constants.dart';
+import 'package:tracker/src/customwidget/CommonTextWidget.dart';
+import 'package:tracker/src/customwidget/CustomButton.dart';
 import 'package:tracker/src/model/UserModel.dart';
 import '../LoginPage.dart';
 /*
@@ -33,14 +35,13 @@ class _CustomFormWidget extends State<CustomFormWidget> {
             showDialog(context: context,
                 builder: (_)=> AlertDialog(
                   title: Text("Success"),
-                  content: Text("Account Successfully Created. Please login with your account"),
+                  content: Text(Constants.MSG_SUCCESS_NEW_ACCOUNT), // can be replaced by message from API
                   actions: <Widget>[
                     FlatButton(
-                      child: Text("Ok"),
+                      child: Text("OK"),
                       onPressed: (){
                         Navigator.of(context).pop(); //close Dialog box before moving to next page
                          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
-                       // Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
                       },
                     )
                   ],
@@ -52,7 +53,7 @@ class _CustomFormWidget extends State<CustomFormWidget> {
                   content: Text(data.message.toString()),
                   actions: <Widget>[
                     FlatButton(
-                      child: Text("Ok"),
+                      child: Text("OK"),
                       onPressed: (){
                         Navigator.of(context).pop(); //close Dialog box before moving to next page
                       },
@@ -63,59 +64,41 @@ class _CustomFormWidget extends State<CustomFormWidget> {
 
         }
       },
-      child:Container(
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(vertical: 15),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(15)),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Colors.green.withAlpha(100),
-                  offset: Offset(2, 4),
-                  blurRadius: 8,
-                  spreadRadius: 2)
-            ],
-            color: Colors.green[600]),
-        child: Text(
-          'Register Now',
-          style: TextStyle( fontSize: 20, color: Colors.white),
-        ),
+      child: CustomButton(
+        label: Constants.TXT_BUTTON_REGISTER,
       ),
+
     );
   }
   @override
   Widget build(BuildContext context) {
-    final halfScreen = (MediaQuery.of(context).size.width - 50) / 2.0;
     return Form(
       key: _formKey,
       child: Column(children: <Widget>[
         Container(
-          child: MultiTextForm(
-            title: 'Username / E-Mail Address',
+          child: CommonTextWidget(
+            title: Constants.TXT_LABEL_USERNAME,
             onSaved: (String value){
               userModel.username=value;
             },
             evaluator: (String value){
               if (value.isEmpty){
-                return 'Please enter a Username';
+                return Constants.MSG_ERROR_USERNAME;
               }
               return null;
             },
           ),
         ),
-
-
         Container(
-          child: MultiTextForm(
-            title: 'Password',
+          child: CommonTextWidget(
+            title: Constants.TXT_LABEL_PASSWORD,
             isPassword: true,
             onSaved: (String value){
               userModel.password=value;
             },
             evaluator: (String value){
               if (value.length < 8){
-                return 'Please enter a minimum 8 character password';
+                return Constants.MSG_ERROR_PASSWORD_FMT;
               }
               _formKey.currentState.save();
               return null;
@@ -123,83 +106,32 @@ class _CustomFormWidget extends State<CustomFormWidget> {
           ),
         ),
         Container(
-          child: MultiTextForm(
-            title: 'Confirm Password',
+          child: CommonTextWidget(
+            title: Constants.TXT_LABEL_CONFIRM_PASSWORD,
             isPassword: true,
             evaluator: (String value){
               if (value.length < 8){
-                return 'Please enter Password';
+                return Constants.MSG_ERROR_PASSWORD;
               }else if(userModel.password!=null && userModel.password != value){
-                return 'Password does not match';
+                return Constants.MSG_ERROR_MISMATCH;
               }
               return null;
             },
           ),
         ),
         Container(
-          margin: EdgeInsets.symmetric(vertical: 10),
           child: _submitButton(),
         ),
-
       ]),
     );
   }
 
   Future<http.Response> submitData() async{
-    String url = 'http://kelvinco.ml/webapp/ct_signup.php';
-    //String header = 'Content-Type\': \'application/json; charset=UTF-8\'';
-    final resp = await http.post(url,body: signupModelToJson(userModel).toString());
+    final resp = await http.post(Constants.API_URL_SIGN_UP,body: signupModelToJson(userModel).toString());
     return resp;
   }
 
 
 }
 
-class MultiTextForm extends StatelessWidget {
-  final String title;
-  final bool isPassword,isNumeric;
-  final Function onSaved, evaluator;
 
-  MultiTextForm({
-    this.title,
-    this.isPassword = false,
-    this.isNumeric = false,
-    this.onSaved,
-    this.evaluator,
-  });
-  @override
-  Widget build(BuildContext context) {
-
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          //Text(title,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
-          SizedBox(height: 5),
-          TextFormField(
-            obscureText: isPassword,
-            onSaved: onSaved,
-            keyboardType: isNumeric ? TextInputType.phone : TextInputType.text ,
-            inputFormatters: isNumeric ? [LengthLimitingTextInputFormatter(11),] : [LengthLimitingTextInputFormatter(50),],
-
-            //style: TextStyle(color: Colors.black,height: 1.0,),
-            decoration: InputDecoration(
-              hintText: title,
-              contentPadding: EdgeInsets.symmetric(horizontal: 15),
-              border: InputBorder.none,
-              fillColor: Colors.grey[200],
-              filled: true,
-
-            ),
-            validator: evaluator,
-          )
-        ],
-      ),
-    );
-  }
-
-
-
-
-}

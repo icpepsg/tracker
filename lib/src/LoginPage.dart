@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tracker/src/common/Constants.dart';
 import 'package:tracker/src/customwidget/CommonTextWidget.dart';
+import 'package:tracker/src/customwidget/CustomButton.dart';
 import 'package:tracker/src/model/UserModel.dart';
 import 'Home.dart';
 import 'Signup.dart';
@@ -38,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
     _username = _prefs.then((SharedPreferences prefs) {
       return (prefs.getString('username') ?? null);
     });
-    printUser();
+    //printUser();
   }
 
   Future<void> _setUser(String user) async {
@@ -53,9 +55,6 @@ class _LoginPageState extends State<LoginPage> {
   void printUser(){
     _getUser().then((value) {
     print('username : $value');
-    if(value!=null){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-    }
     });
   }
 
@@ -75,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                   content: Text("Login Successful"),
                   actions: <Widget>[
                     FlatButton(
-                      child: Text("Ok"),
+                      child: Text("OK"),
                       onPressed: () async {
                         _setUser(userModel.username);
                         Navigator.of(context).pop(); //close Dialog box before moving to next page
@@ -106,35 +105,15 @@ class _LoginPageState extends State<LoginPage> {
         }
         //Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       },
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(vertical: 13,horizontal: 20),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Colors.green.withAlpha(100),
-                  offset: Offset(2, 4),
-                  blurRadius: 8,
-                  spreadRadius: 2)
-            ],
-            color: Colors.green[700]),
-        child: Text(
-          'Login',
-          style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
-        ),
+      child: CustomButton(
+        label: Constants.TXT_BUTTON_LOGIN,
       ),
     );
   }
   Future<http.Response> submitData() async{
-    String url = 'http://kelvinco.ml/webapp/login.php';
-    final resp = await http.post(url,body: signupModelToJson(userModel).toString());
+    final resp = await http.post(Constants.API_URL_LOGIN,body: signupModelToJson(userModel).toString());
     return resp;
   }
-
-
 
   Widget _createAccountLabel() {
     return Container(
@@ -143,22 +122,17 @@ class _LoginPageState extends State<LoginPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(
-            'Don\'t have an account ?',
+          Text(Constants.TXT_LABEL_NO_ACCOUNT,
             style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
           ),
-          SizedBox(
-            width: 10,
-          ),
+          SizedBox(width: 10),
           InkWell(
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => Signup()));
             },
-            child: Text(
-              'Register',
-              style: TextStyle(
-                  color: Colors.red, fontSize: 13, fontWeight: FontWeight.w600),
+            child: Text(Constants.TXT_LABEL_REGISTER,
+              style: TextStyle(color: Colors.red, fontSize: 13, fontWeight: FontWeight.w600),
             ),
           )
         ],
@@ -186,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                   alignment: Alignment.center,
                   height: 200.0,
                   child: ImageContainer(
-                    assetLocation: 'assets/images/ct_logo.png',
+                    assetLocation: Constants.IMG_TRACKER,
                   ),
                 ),
                 SizedBox(
@@ -194,13 +168,13 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Container(
                   child: CommonTextWidget(
-                    title: 'Username',
+                    title: Constants.TXT_LABEL_USERNAME,
                     onSaved: (String value){
                       userModel.username=value;
                     },
                     evaluator: (String value){
                       if (value.isEmpty){
-                        return 'Please enter your Username!';
+                        return Constants.MSG_ERROR_USERNAME;
                       }
                       return null;
                     },
@@ -208,14 +182,14 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Container(
                   child: CommonTextWidget(
-                    title: 'Password',
+                    title: Constants.TXT_LABEL_PASSWORD,
                     isPassword: true,
                     onSaved: (String value){
                       userModel.password=value;
                     },
                     evaluator: (String value){
                       if (value.isEmpty){
-                        return 'Please enter a  password!';
+                        return Constants.MSG_ERROR_PASSWORD;
                       }
                       return null;
                     },
@@ -228,13 +202,9 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   alignment: Alignment.centerRight,
-                  child: Text('Forgot Password ?',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.redAccent)),
+                  child: Text(Constants.TXT_LABEL_FORGOT_PASSWORD,
+                      style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500, color: Colors.redAccent)),
                 ),
-
                 Container(
                   child: Column(
                     children: <Widget>[
@@ -253,9 +223,9 @@ class _LoginPageState extends State<LoginPage> {
                     children: <Widget>[
                       SignInButton(
                         Buttons.Facebook,
-                        onPressed: (){
+                        onPressed: () async {
                           //  To Add in this one
-                          // _login();
+                           _login();
                           print('try logging in to facebook');
                         }
                       )
@@ -278,11 +248,15 @@ class _LoginPageState extends State<LoginPage> {
   void _login() async {
     final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
     final token = result.accessToken.token;
-    final graphResp = await http.get('https://graph.facebook.com/v2.3/me?fields=name,first_name,email&access_token=' +token);
-    print(graphResp.body);
+    final graphResp = await http.get(Constants.API_URL_FACEBOOK_TOKEN +token);
+    print('graphResp => '+graphResp.body);
     if(result.status==FacebookLoginStatus.loggedIn){
       //final credential = FacebookAuthProvider.getCredential(accessToken: token);
       print("its logged in");
+      Map userMap = jsonDecode(graphResp.body);
+      var data = UserModel.fromJson(userMap);
+      print("Email => " +data.email);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
     }
 
   }

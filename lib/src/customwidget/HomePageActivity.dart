@@ -31,18 +31,14 @@ class _MyHomePageState extends State<HomePageActivity> {
   );
   //default cameraposition
 
-
   Future<Uint8List> getMarker() async {
     ByteData byteData = await DefaultAssetBundle.of(context).load("assets/images/direction.png");
     return byteData.buffer.asUint8List();
   }
-
   void updateMarkerAndCircle( LocationData newLocalData, Uint8List imageData) {
     //newLocalData.latitude -> Current Latitude
     //newLocalData.longitude -> Current Longitude
-
     latlng = LatLng(newLocalData.latitude, newLocalData.longitude);
-
 
 
     this.setState(() {
@@ -126,7 +122,6 @@ class _MyHomePageState extends State<HomePageActivity> {
                                  height: 300,
                                  child:
                                  GoogleMap(
-
                                    mapType: MapType.hybrid,
                                    initialCameraPosition: initialLocation,
                                    markers: Set.of((marker != null) ? [marker] : []),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tracker/src/LoginPage.dart';
+import 'package:tracker/src/SplashScreen.dart';
 /*
  Author : kelvin Co
  */
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: SplashScreen(),
     );
   }
 }
