@@ -1,13 +1,12 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:tracker/src/model/UserModel.dart';
-
-
 import '../LoginPage.dart';
-
+/*
+ Author : kelvin Co
+ */
 
 class CustomFormWidget extends StatefulWidget {
   @override
@@ -93,7 +92,7 @@ class _CustomFormWidget extends State<CustomFormWidget> {
       child: Column(children: <Widget>[
         Container(
           child: MultiTextForm(
-            title: 'Username',
+            title: 'Username / E-Mail Address',
             onSaved: (String value){
               userModel.username=value;
             },
@@ -105,8 +104,6 @@ class _CustomFormWidget extends State<CustomFormWidget> {
             },
           ),
         ),
-
-
 
 
         Container(
@@ -139,86 +136,11 @@ class _CustomFormWidget extends State<CustomFormWidget> {
             },
           ),
         ),
-        Row (
-          children: <Widget>[
-            Container(
-              width: halfScreen,
-              child: MultiTextForm(
-                title: 'First Name',
-                onSaved: (String value){
-                  userModel.firstname=value;
-                },
-                evaluator: (String value){
-                  if (value.isEmpty){
-                    return 'Please enter your First Name';
-                  }
-                  return null;
-                },
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Container(
-              width: halfScreen,
-              child: MultiTextForm(
-                title: 'Middle Name',
-                onSaved: (String value){
-                  userModel.firstname=value;
-                },
-              ),
-            ),
-          ],
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 10),
+          child: _submitButton(),
         ),
 
-        Container(
-          child: MultiTextForm(
-            title: 'Last Name',
-            onSaved: (String value){
-              userModel.lastname=value;
-            },
-            evaluator: (String value){
-              if (value.isEmpty){
-                return 'Please enter your Last Name';
-              }
-              return null;
-            },
-          ),
-        ),
-        Container(
-          child: MultiTextForm(
-            title: 'E-Mail Address',
-            onSaved: (String value){
-              userModel.email=value;
-            },
-          ),
-        ),
-        Container(
-          child: MultiTextForm(
-            title: 'Mobile Number',
-            isNumeric:true,
-            onSaved: (String value){
-              userModel.mobileno=value;
-            },
-            evaluator: (String value){
-              if (value.isEmpty){
-                return 'Please enter Mobile Number';
-              }else if(value.length < 11||value.length>11){
-                return 'Please enter a Valid 11 Digit Mobile Number';
-              }
-              return null;
-            },
-          ),
-        ),
-
-        // button
-        SizedBox(
-          height: 150,
-        ),
-        _submitButton(),
-        SizedBox(
-          height: 20,
-        ),
       ]),
     );
   }

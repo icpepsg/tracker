@@ -1,8 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracker/src/customwidget/CommonTextWidget.dart';
 import 'package:tracker/src/model/UserModel.dart';
 import 'Home.dart';
@@ -10,6 +10,11 @@ import 'Signup.dart';
 import 'package:tracker/src/customwidget/ImageContainer.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'dart:async';
+
+/*
+ Author : kelvin Co
+ */
+
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
 
@@ -20,9 +25,39 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  Future<String> _username; //TODO  : Change this to token on phase 2
+
   UserModel userModel = new UserModel();
   final _formKey = GlobalKey<FormState>();
   static final FacebookLogin facebookSignIn = new FacebookLogin();
+
+  @override
+  void initState() {
+    super.initState();
+    _username = _prefs.then((SharedPreferences prefs) {
+      return (prefs.getString('username') ?? null);
+    });
+    printUser();
+  }
+
+  Future<void> _setUser(String user) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setString("username", user);
+  }
+
+  Future<String> _getUser() async {
+    final SharedPreferences prefs = await _prefs;
+    return prefs.getString('username');
+  }
+  void printUser(){
+    _getUser().then((value) {
+    print('username : $value');
+    if(value!=null){
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    }
+    });
+  }
 
   Widget _submitButton() {
     return InkWell(
@@ -41,9 +76,10 @@ class _LoginPageState extends State<LoginPage> {
                   actions: <Widget>[
                     FlatButton(
                       child: Text("Ok"),
-                      onPressed: (){
+                      onPressed: () async {
+                        _setUser(userModel.username);
                         Navigator.of(context).pop(); //close Dialog box before moving to next page
-                         Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
                       },
                     )
                   ],
@@ -215,14 +251,12 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                   child: Column(
                     children: <Widget>[
-                      new Text(' '),
-                      new Text('------  or  ------',style: TextStyle(color: Colors.red),),
-                      new Text(' '),
                       SignInButton(
                         Buttons.Facebook,
                         onPressed: (){
                           //  To Add in this one
                           // _login();
+                          print('try logging in to facebook');
                         }
                       )
                     ],

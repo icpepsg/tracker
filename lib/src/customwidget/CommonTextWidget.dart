@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+/*
+ Author : kelvin Co
+ */
 class CommonTextWidget extends StatelessWidget {
   final String title;
   final bool isPassword,isNumeric;

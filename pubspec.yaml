@@ -27,8 +27,6 @@ dependencies:
   google_fonts: ^0.3.7
   flutter_signin_button: ^1.0.0
   flutter_facebook_login: ^3.0.0
-  google_maps_flutter: ^0.5.21+15
-  location: ^2.3.5
 
 
 dev_dependencies:
@@ -57,9 +55,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/icpep.png
-    - assets/images/direction.png
     - assets/images/ct_logo.png
-
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg
