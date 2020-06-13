@@ -28,6 +28,9 @@ dependencies:
   flutter_signin_button: ^1.0.0
   flutter_facebook_login: ^3.0.0
   shared_preferences: ^0.5.7+3
+  google_maps_flutter: ^0.5.21+15
+  location: ^2.3.5
+
 
 dev_dependencies:
   flutter_test:
