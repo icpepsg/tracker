@@ -18,6 +18,8 @@ class UserModel {
   String email;
   String success;
   String message;
+  String picture;
+  String fbToken;
 
   UserModel({
     this.username,
@@ -28,7 +30,9 @@ class UserModel {
     this.mobileno,
     this.email,
     this.success,
-    this.message
+    this.message,
+    this.picture,
+    this.fbToken
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -40,7 +44,9 @@ class UserModel {
     mobileno: json["mobileno"],
     email: json["email"],
     success: json['success'],
-    message: json['message']
+    message: json['message'],
+      picture: json['picture'],
+      fbToken: json['fbToken']
   );
 
   Map<String, dynamic> toJson() => {
@@ -52,7 +58,8 @@ class UserModel {
     "mobileno": mobileno,
     "email": email,
     "success": success,
-    "message": message
-
+    "message": message,
+    "picture": picture,
+    "fbToken": fbToken
   };
 }
