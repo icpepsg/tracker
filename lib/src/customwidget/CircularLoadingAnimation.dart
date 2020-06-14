@@ -13,7 +13,7 @@ class _CircularLoadingAnimationState extends State<CircularLoadingAnimation> wit
   AnimationController _radialProgressAnimationController;
   Animation<double> _progressAnimation;
   final Duration fadeInDuration = Duration(milliseconds: 10);
-  final Duration fillDuration = Duration(seconds: 3);
+  final Duration fillDuration = Duration(seconds: 1);
 
   double progressDegrees = 0;
   var count = 0;
@@ -86,11 +86,11 @@ class RadialPainter extends CustomPainter {
 
     Paint progressPaint = Paint()
       ..shader = LinearGradient(
-          colors: [Colors.green, Colors.lightGreenAccent, Colors.lightGreen])
+          colors: [Colors.green, Colors.limeAccent, Colors.lightGreen])
           .createShader(Rect.fromCircle(center: center, radius: size.width / 2))
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 15.0;
+      ..strokeWidth = 30.0;
 
     canvas.drawArc(
         Rect.fromCircle(center: center, radius: size.width / 2),
