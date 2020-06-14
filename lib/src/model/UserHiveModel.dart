@@ -8,7 +8,5 @@ class UserHiveModel{
   int id;
   @HiveField(1)
   String name;
-  @HiveField(2)
-  DateTime birthDate;
-  UserHiveModel(this.id, this.name, this.birthDate);
+
 }
