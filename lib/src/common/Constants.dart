@@ -6,7 +6,7 @@ class Constants {
       static const IMG_ICPEP = 'assets/images/icpep.png';
       static const IMG_TRACKER = 'assets/images/ct_logo.png';
       static const IMG_ARROW = 'assets/images/direction.png';
-
+      static const IMG_DEFAULT_PHOTO = 'assets/images/default_photo.png';
       //LABELS
       static const TXT_BUTTON_LOGIN  = 'LOGIN';
       static const TXT_BUTTON_LOGOUT = 'LOGOUT';
@@ -29,5 +29,6 @@ class Constants {
       //URLS
       static const API_URL_LOGIN = 'http://kelvinco.ml/webapp/login.php';
       static const API_URL_SIGN_UP = 'http://kelvinco.ml/webapp/ct_signup.php';
-      static const API_URL_FACEBOOK_TOKEN = 'https://graph.facebook.com/v2.3/me?fields=name,first_name,email&access_token=';
+      static const API_URL_FACEBOOK_TOKEN = 'https://graph.facebook.com/v2.3/me?fields=email,id,first_name,last_name,middle_name,name,name_format,picture,short_name&access_token=';
+      static const API_URL_DEFAULT_PHOTO  = 'http://kelvinco.ml/default_photo.png';
 }
