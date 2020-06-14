@@ -79,7 +79,7 @@ class _CustomFormWidget extends State<CustomFormWidget> {
           child: CommonTextWidget(
             title: Constants.TXT_LABEL_USERNAME,
             onSaved: (String value){
-              userModel.username=value;
+              userModel.email=value;
             },
             evaluator: (String value){
               if (value.isEmpty){
@@ -127,7 +127,7 @@ class _CustomFormWidget extends State<CustomFormWidget> {
   }
 
   Future<http.Response> submitData() async{
-    final resp = await http.post(Constants.API_URL_SIGN_UP,body: signupModelToJson(userModel).toString());
+    final resp = await http.post(Constants.API_URL_SIGN_UP,body: userModelToJson(userModel).toString());
     return resp;
   }
 
