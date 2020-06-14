@@ -1,3 +1,5 @@
+import 'package:tracker/src/common/Constants.dart';
+
 import 'customwidget/ImageContainer.dart';
 import 'customwidget/HomePageActivity.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,11 @@ class _HomeState extends State<Home> {
   int _currentIndex = 0;
   bool isOk = false;
   String data;
+  @override
+  void initState() {
+    print('initState : _HomeState ');
+    super.initState();
+  }
 
   final List<Widget> _children = [
     HomePageActivity(),
@@ -33,8 +40,7 @@ class _HomeState extends State<Home> {
           children: [
             Container(
               height: 45,
-              child: ImageContainer(
-                  assetLocation:'assets/images/icpep.png'),
+              child: ImageContainer(assetLocation: Constants.IMG_ICPEP),
             ),
             Container(
                 alignment: Alignment.center,

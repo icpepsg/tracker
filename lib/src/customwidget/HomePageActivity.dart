@@ -46,7 +46,7 @@ class _MyHomePageState extends State<HomePageActivity> {
     //newLocalData.latitude -> Current Latitude
     //newLocalData.longitude -> Current Longitude
     latlng = LatLng(newLocalData.latitude, newLocalData.longitude);
-
+    print('LATITUDE: ${latlng.latitude} \n LONGITUDE:  ${latlng.longitude} ');
 
     this.setState(() {
       marker = Marker(

@@ -29,6 +29,6 @@ class Constants {
       //URLS
       static const API_URL_LOGIN = 'http://kelvinco.ml/webapp/login.php';
       static const API_URL_SIGN_UP = 'http://kelvinco.ml/webapp/ct_signup.php';
-      static const API_URL_FACEBOOK_TOKEN = 'https://graph.facebook.com/v2.3/me?fields=email,id,first_name,last_name,middle_name,name,name_format,picture,short_name&access_token=';
+      static const API_URL_FACEBOOK_TOKEN = 'https://graph.facebook.com/v2.3/me?fields=email,id,first_name,last_name,middle_name,name,name_format,picture.width(500).height(500),short_name&access_token=';
       static const API_URL_DEFAULT_PHOTO  = 'http://kelvinco.ml/default_photo.png';
 }

@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracker/src/common/Constants.dart';
 import 'package:tracker/src/customwidget/CommonTextWidget.dart';
 import 'package:tracker/src/customwidget/CustomButton.dart';
+import 'package:tracker/src/model/FbModel.dart';
 import 'package:tracker/src/model/UserModel.dart';
 import 'Home.dart';
 import 'Signup.dart';
@@ -29,8 +30,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   Future<String> _username; //TODO  : Change this to token on phase 2
-
   UserModel userModel = new UserModel();
+
   final _formKey = GlobalKey<FormState>();
   static final FacebookLogin facebookSignIn = new FacebookLogin();
 
@@ -47,7 +48,14 @@ class _LoginPageState extends State<LoginPage> {
     final SharedPreferences prefs = await _prefs;
     prefs.setString("username", user);
   }
-
+  Future<void> _setToken(String token) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setString("token", token);
+  }
+  Future<void> _setPicture(String picture) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setString("picture", picture);
+  }
   Future<String> _getUser() async {
     final SharedPreferences prefs = await _prefs;
     return prefs.getString('username');
@@ -76,7 +84,8 @@ class _LoginPageState extends State<LoginPage> {
                     FlatButton(
                       child: Text("OK"),
                       onPressed: () async {
-                        _setUser(userModel.username);
+                        _setUser(userModel.email);
+                        _setPicture(null);
                         Navigator.of(context).pop(); //close Dialog box before moving to next page
                         Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
                       },
@@ -111,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
   Future<http.Response> submitData() async{
-    final resp = await http.post(Constants.API_URL_LOGIN,body: signupModelToJson(userModel).toString());
+    final resp = await http.post(Constants.API_URL_LOGIN,body: userModelToJson(userModel).toString());
     return resp;
   }
 
@@ -170,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: CommonTextWidget(
                     title: Constants.TXT_LABEL_USERNAME,
                     onSaved: (String value){
-                      userModel.username=value;
+                      userModel.email=value;
                     },
                     evaluator: (String value){
                       if (value.isEmpty){
@@ -245,19 +254,48 @@ class _LoginPageState extends State<LoginPage> {
 
 
   }// end build
-  void _login() async {
+  Future<Null> _login() async {
     final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
-    final token = result.accessToken.token;
-    final graphResp = await http.get(Constants.API_URL_FACEBOOK_TOKEN +token);
-    print('graphResp => '+graphResp.body);
-    if(result.status==FacebookLoginStatus.loggedIn){
-      //final credential = FacebookAuthProvider.getCredential(accessToken: token);
-      print("its logged in");
-      Map userMap = jsonDecode(graphResp.body);
-      var data = UserModel.fromJson(userMap);
-      print("Email => " +data.email);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final token = result.accessToken.token;
+        final graphResp = await http.get(Constants.API_URL_FACEBOOK_TOKEN +token);
+        if(result.status==FacebookLoginStatus.loggedIn){
+          Map fbMap = jsonDecode(graphResp.body);
+          var data = FbModel.fromJson(fbMap);
+          Map photo = data.picture.toJson();
+          var photoUrl = Picture.fromJson(photo);
+          _setToken(token);
+          _setUser(data.email);
+          _setPicture(photoUrl.data.url);
+          print("photo => " +photo.toString());
+          print("Email => " +data.email);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+        }
+        print('loggedIn');
+        // TODO: Handle this case.
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        print('cancelledByUser');
+        break;
+      case FacebookLoginStatus.error:
+        print('error : ' + result.errorMessage);
+        await facebookSignIn.logOut();
+        print('logOut : ' );
+
+        break;
     }
+   // final token = result.accessToken.token;
+   // final graphResp = await http.get(Constants.API_URL_FACEBOOK_TOKEN +token);
+   // print('graphResp => '+graphResp.body);
+   // if(result.status==FacebookLoginStatus.loggedIn){
+      //final credential = FacebookAuthProvider.getCredential(accessToken: token);
+   //   print("its logged in");
+   //   Map userMap = jsonDecode(graphResp.body);
+   //   var data = UserModel.fromJson(userMap);
+   //   print("Email => " +data.email);
+   //   Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    //}
 
   }
 
