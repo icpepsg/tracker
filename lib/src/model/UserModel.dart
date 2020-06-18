@@ -14,21 +14,27 @@ class UserModel {
     this.password,
     this.message,
     this.success,
+    this.token,
+    // ignore: non_constant_identifier_names
+    this.device_id
 
   });
 
   String username;
   String password;
   String message;
-  String success;
-
+  bool success;
+  String token;
+  // ignore: non_constant_identifier_names
+  String device_id;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
     username: json["username"],
     password: json["password"],
     message: json["message"],
     success: json["success"],
-
+    token: json["token"],
+    device_id: json["device_id"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -36,6 +42,7 @@ class UserModel {
     "password": password,
     "message": message,
     "success": success,
-
+    "token": token,
+    "device_id": device_id,
   };
 }

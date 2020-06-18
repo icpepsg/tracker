@@ -13,12 +13,12 @@ class LoginEvent extends Equatable{
 
 class AuthLogin extends LoginEvent{
   final _username;
-
-  AuthLogin(this._username);
+  final _password;
+  AuthLogin(this._username,this._password);
 
   @override
   // TODO: implement props
-  List<Object> get props => [_username];
+  List<Object> get props => [_username,_password];
 }
 
 
@@ -70,10 +70,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState>{
     if(event is AuthLogin){
       yield LoginIsLoading();
       try{
-        UserModel userData = await loginService.authUser(event._username);
+        UserModel userData = await loginService.authUser(event._username,event._password);
         print(userData);
         print('userData.success '+userData.success.toString());
-        if(userData.success=="True"){
+        if(userData.success){
           yield LoginIsLoaded(userData);
         }else{
           print('Authentication failed...');

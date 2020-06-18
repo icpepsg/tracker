@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:tracker/src/common/Constants.dart';
 import 'package:tracker/src/customwidget/CommonTextWidget.dart';
@@ -17,59 +20,79 @@ class CustomFormWidget extends StatefulWidget {
 
 class _CustomFormWidget extends State<CustomFormWidget> {
   final _formKey = GlobalKey<FormState>();
-  final int httpSuccess = 200;
   UserModel userModel = new UserModel();
+  String deviceID, hardware, brand, id, identifierForVendor;
+  DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+
+  _CustomFormWidget();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
+
 
   Widget _submitButton() {
     return InkWell(
-      onTap: () async{
-        if(_formKey.currentState.validate()){
+      onTap: () async {
+        if (_formKey.currentState.validate()) {
           _formKey.currentState.save();
+
           http.Response result = await submitData();
           Map userMap = jsonDecode(result.body);
           var data = UserModel.fromJson(userMap);
-          print('##############################################################');
+          print(
+              '##############################################################');
           print('Success = ${data.success}');
           print('Message =  ${data.message}.');
-          if(data.success.toString()=="1"){
-            showDialog(context: context,
-                builder: (_)=> AlertDialog(
-                  title: Text("Success"),
-                  content: Text(Constants.MSG_SUCCESS_NEW_ACCOUNT), // can be replaced by message from API
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text("OK"),
-                      onPressed: (){
-                        Navigator.of(context).pop(); //close Dialog box before moving to next page
-                         Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
-                      },
-                    )
-                  ],
-                ));
-          }else{
-            showDialog(context: context,
-                builder: (_)=> AlertDialog(
-                  title: Text("Failed"),
-                  content: Text(data.message.toString()),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text("OK"),
-                      onPressed: (){
-                        Navigator.of(context).pop(); //close Dialog box before moving to next page
-                      },
-                    )
-                  ],
-                ));
+          if (data.success.toString() == "1") {
+            showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                      title: Text("Success"),
+                      content: Text(Constants
+                          .MSG_SUCCESS_NEW_ACCOUNT), // can be replaced by message from API
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text("OK"),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pop(); //close Dialog box before moving to next page
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginPage()));
+                          },
+                        )
+                      ],
+                    ));
+          } else {
+            showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                      title: Text("Failed"),
+                      content: Text(data.message.toString()),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text("OK"),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pop(); //close Dialog box before moving to next page
+                          },
+                        )
+                      ],
+                    ));
           }
-
         }
       },
       child: CustomButton(
         label: Constants.TXT_BUTTON_REGISTER,
       ),
-
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -78,11 +101,11 @@ class _CustomFormWidget extends State<CustomFormWidget> {
         Container(
           child: CommonTextWidget(
             title: Constants.TXT_LABEL_USERNAME,
-            onSaved: (String value){
-              userModel.username=value;
+            onSaved: (String value) {
+              userModel.username = value;
             },
-            evaluator: (String value){
-              if (value.isEmpty){
+            evaluator: (String value) {
+              if (value.isEmpty) {
                 return Constants.MSG_ERROR_USERNAME;
               }
               return null;
@@ -93,11 +116,11 @@ class _CustomFormWidget extends State<CustomFormWidget> {
           child: CommonTextWidget(
             title: Constants.TXT_LABEL_PASSWORD,
             isPassword: true,
-            onSaved: (String value){
-              userModel.password=value;
+            onSaved: (String value) {
+              userModel.password = value;
             },
-            evaluator: (String value){
-              if (value.length < 8){
+            evaluator: (String value) {
+              if (value.length < 8) {
                 return Constants.MSG_ERROR_PASSWORD_FMT;
               }
               _formKey.currentState.save();
@@ -109,10 +132,11 @@ class _CustomFormWidget extends State<CustomFormWidget> {
           child: CommonTextWidget(
             title: Constants.TXT_LABEL_CONFIRM_PASSWORD,
             isPassword: true,
-            evaluator: (String value){
-              if (value.length < 8){
+            evaluator: (String value) {
+              if (value.length < 8) {
                 return Constants.MSG_ERROR_PASSWORD;
-              }else if(userModel.password!=null && userModel.password != value){
+              } else if (userModel.password != null &&
+                  userModel.password != value) {
                 return Constants.MSG_ERROR_MISMATCH;
               }
               return null;
@@ -126,12 +150,34 @@ class _CustomFormWidget extends State<CustomFormWidget> {
     );
   }
 
-  Future<http.Response> submitData() async{
-    final resp = await http.post(Constants.API_URL_SIGN_UP,body: userModelToJson(userModel).toString());
+  Future<http.Response> submitData() async {
+    try {
+      if (Platform.isAndroid) {
+        AndroidDeviceInfo androidDeviceInfo = await deviceInfoPlugin.androidInfo;
+        setState(() {
+          deviceID = androidDeviceInfo.androidId.toString();
+        },
+        );
+      } else if (Platform.isIOS) {
+        IosDeviceInfo iosDeviceInfo = await deviceInfoPlugin.iosInfo;
+        setState(() {
+          print('identifierForVendor: ${iosDeviceInfo.identifierForVendor}');
+          identifierForVendor=iosDeviceInfo.identifierForVendor.toString();
+        },
+        );
+      }
+    } on PlatformException {
+      print('Error: Failed to get platform version.');
+    }
+
+    if (Platform.isAndroid)
+      userModel.device_id = deviceID;
+    else if (Platform.isIOS)
+      userModel.device_id = identifierForVendor;
+    print('==>>>' + userModelToJson(userModel));
+    final resp = await http.post(Constants.API_URL_SIGN_UP,
+        headers: {"Content-Type": "application/json"},
+        body: userModelToJson(userModel));
     return resp;
   }
-
-
 }
-
-

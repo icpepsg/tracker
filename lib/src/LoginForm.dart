@@ -68,7 +68,7 @@ class _LoginFormState extends State<LoginForm> {
       onTap: () async {
         if (_formKey.currentState.validate()) {
           _formKey.currentState.save();
-          loginBloc.add(AuthLogin(userModel.username));
+          loginBloc.add(AuthLogin(userModel.username,userModel.password));
         }
         //Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       },

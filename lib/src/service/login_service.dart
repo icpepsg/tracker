@@ -5,18 +5,22 @@ import 'dart:convert';
 
 
 class LoginService{
-  Future<UserModel> authUser(String username) async{
+  Future<UserModel> authUser(String username,String password) async{
     UserModel userModel = new UserModel();
     userModel.username =username;
-    final resp = await http.post(Constants.API_URL_LOGIN,body: userModelToJson(userModel).toString());
+    userModel.password =password;
+    final resp = await http.post(Constants.API_URL_LOGIN,headers: {"Content-Type": "application/json"},body: userModelToJson(userModel));
 
     print('LoginService...');
     print('resp.statusCode...' +resp.statusCode.toString());
+
     if(resp.statusCode != 200 && resp.statusCode != 201)
-      throw Exception();
+     throw Exception();
 
     Map userMap = jsonDecode(resp.body);
+
     var data = UserModel.fromJson(userMap);
+    print('success' +data.success.toString());
 
     return data;
   }
