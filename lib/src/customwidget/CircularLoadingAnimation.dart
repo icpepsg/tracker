@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tracker/src/common/Constants.dart';
 import 'package:tracker/src/customwidget/ImageContainer.dart';
 import 'package:vector_math/vector_math_64.dart' as math;
 
@@ -33,6 +34,11 @@ class _CircularLoadingAnimationState extends State<CircularLoadingAnimation> wit
 
     _radialProgressAnimationController.forward();
   }
+  @override
+  void didUpdateWidget(CircularLoadingAnimation oldWidget) {
+
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   void dispose() {
@@ -56,7 +62,7 @@ class _CircularLoadingAnimationState extends State<CircularLoadingAnimation> wit
                 height: 190.0,
                 width: 190.0,
                 child: ImageContainer(
-                  assetLocation: 'assets/images/icpep.png',
+                  assetLocation: Constants.IMG_ICPEP,
                 ),
               ),
             ],

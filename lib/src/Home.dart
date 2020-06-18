@@ -49,7 +49,16 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
-      body: _children[_currentIndex], // new
+      body: ConstrainedBox(
+          constraints: BoxConstraints(
+              minWidth: 70, minHeight: 70,
+              maxWidth: 1800,
+              maxHeight: 1800),
+          //child: Container(color: Colors.red, width: 10, height: 10)
+          child: _children[_currentIndex]
+      ), // new
+
+    //child: _children[_currentIndex]
       /*floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: new FloatingActionButton(
         child: Icon(Icons.camera_alt),

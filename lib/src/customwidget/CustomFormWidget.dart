@@ -79,7 +79,7 @@ class _CustomFormWidget extends State<CustomFormWidget> {
           child: CommonTextWidget(
             title: Constants.TXT_LABEL_USERNAME,
             onSaved: (String value){
-              userModel.email=value;
+              userModel.username=value;
             },
             evaluator: (String value){
               if (value.isEmpty){

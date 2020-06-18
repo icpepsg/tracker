@@ -10,21 +10,21 @@ String userModelToJson(UserModel data) => json.encode(data.toJson());
 
 class UserModel {
   UserModel({
-    this.email,
+    this.username,
     this.password,
     this.message,
     this.success,
 
   });
 
-  String email;
+  String username;
   String password;
   String message;
   String success;
 
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-    email: json["email"],
+    username: json["username"],
     password: json["password"],
     message: json["message"],
     success: json["success"],
@@ -32,7 +32,7 @@ class UserModel {
   );
 
   Map<String, dynamic> toJson() => {
-    "email": email,
+    "username": username,
     "password": password,
     "message": message,
     "success": success,
