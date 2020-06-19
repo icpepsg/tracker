@@ -1,7 +1,9 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tracker/src/Home.dart';
 import 'package:tracker/src/Signup.dart';
 import 'package:tracker/src/bloc/login_bloc.dart';
 import 'package:tracker/src/common/Constants.dart';
@@ -10,14 +12,15 @@ import 'package:tracker/src/customwidget/CustomButton.dart';
 import 'package:tracker/src/customwidget/ImageContainer.dart';
 import 'package:tracker/src/model/UserModel.dart';
 
-class LoginForm extends StatefulWidget{
-  LoginForm({Key key, this.title}) : super(key: key);
-
+class LoginForm extends StatefulWidget {
+  LoginForm({Key key, this.title, this.errMssage}) : super(key: key);
+  final String errMssage;
   final String title;
 
   @override
   _LoginFormState createState() => _LoginFormState();
 }
+
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -32,6 +35,7 @@ class _LoginFormState extends State<LoginForm> {
     });
     //printUser();
   }
+
   Future<void> _setUser(String user) async {
     final SharedPreferences prefs = await _prefs;
     prefs.setString("username", user);
@@ -51,15 +55,12 @@ class _LoginFormState extends State<LoginForm> {
     final SharedPreferences prefs = await _prefs;
     return prefs.getString('username');
   }
+
   void printUser() {
     _getUser().then((value) {
       print('username : $value');
     });
   }
-
-
-
-
 
   Widget _submitButton(BuildContext context) {
     // ignore: close_sinks
@@ -68,16 +69,15 @@ class _LoginFormState extends State<LoginForm> {
       onTap: () async {
         if (_formKey.currentState.validate()) {
           _formKey.currentState.save();
-          loginBloc.add(AuthLogin(userModel.username,userModel.password));
+          loginBloc.add(AuthLogin(userModel.username, userModel.password));
+
         }
-        //Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       },
       child: CustomButton(
         label: Constants.TXT_BUTTON_LOGIN,
       ),
     );
   }
-
 
   Widget _createAccountLabel() {
     return Container(
@@ -93,8 +93,7 @@ class _LoginFormState extends State<LoginForm> {
           SizedBox(width: 10),
           InkWell(
             onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Signup()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Signup()));
             },
             child: Text(
               Constants.TXT_LABEL_REGISTER,
@@ -106,103 +105,120 @@ class _LoginFormState extends State<LoginForm> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: SafeArea(
-              child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 30),
-                  child: Column(children: <Widget>[
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      height: 200.0,
-                      child: ImageContainer(
-                        assetLocation: Constants.IMG_TRACKER,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      child: CommonTextWidget(
-                        title: Constants.TXT_LABEL_USERNAME,
-                        onSaved: (String value) {
-                          userModel.username = value;
-                        },
-                        evaluator: (String value) {
-                          if (value.isEmpty) {
-                            return Constants.MSG_ERROR_USERNAME;
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    Container(
-                      child: CommonTextWidget(
-                        title: Constants.TXT_LABEL_PASSWORD,
-                        isPassword: true,
-                        onSaved: (String value) {
-                          userModel.password = value;
-                        },
-                        evaluator: (String value) {
-                          if (value.isEmpty) {
-                            return Constants.MSG_ERROR_PASSWORD;
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    _submitButton(context),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      alignment: Alignment.centerRight,
-                      child: Text(Constants.TXT_LABEL_FORGOT_PASSWORD,
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.redAccent)),
-                    ),
-                    Container(
-                      child: Column(
-                        children: <Widget>[
-                          new Text(' '),
-                          SignInButton(
-                            Buttons.GoogleDark,
-                            onPressed: () {
+    final loginBloc = BlocProvider.of<LoginBloc>(context);
+
+    return BlocListener<LoginBloc, LoginState>(
+
+        listener: (context, state) {
+      if (state is LoginError) {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${state.getMessage}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }else if (state is LoginIsLoaded){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+      }
+    }, child: BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+      return Form(
+          key: _formKey,
+          child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              body: Container(
+                child: SafeArea(
+                    child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 30),
+                        child: Column(children: <Widget>[
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            height: 200.0,
+                            child: ImageContainer(
+                              assetLocation: Constants.IMG_TRACKER,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            child: CommonTextWidget(
+                              title: Constants.TXT_LABEL_USERNAME,
+                              onSaved: (String value) {
+                                userModel.username = value;
+                              },
+                              evaluator: (String value) {
+                                if (value.isEmpty) {
+                                  return Constants.MSG_ERROR_USERNAME;
+                                }else if(!EmailValidator.validate(value)){
+                                  return Constants.MSG_ERROR_USERNAME_FMT;
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Container(
+                            child: CommonTextWidget(
+                              title: Constants.TXT_LABEL_PASSWORD,
+                              isPassword: true,
+                              onSaved: (String value) {
+                                userModel.password = value;
+                              },
+                              evaluator: (String value) {
+                                if (value.isEmpty) {
+                                  return Constants.MSG_ERROR_PASSWORD;
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          _submitButton(context),
+                          Container(
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            alignment: Alignment.centerRight,
+                            child: Text(Constants.TXT_LABEL_FORGOT_PASSWORD,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.redAccent)),
+                          ),
+                          Container(
+                            child: Column(
+                              children: <Widget>[
+                                new Text(' '),
+                                SignInButton(
+                                  Buttons.GoogleDark,
+                                  onPressed: () {
 // call google sign in here
-                            },
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      child: Column(
-                        children: <Widget>[
-                          SignInButton(Buttons.Facebook,
-                              onPressed: () async {
+                                  },
+                                )
+                              ],
+                            ),
+                          ),
+                          Container(
+                            child: Column(
+                              children: <Widget>[
+                                SignInButton(Buttons.Facebook,
+                                    onPressed: () async {
 //  To Add in this one
-                                print('try logging in to facebook');
-                              })
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: _createAccountLabel(),
-                    ),
-                  ]
-                  )
-              )
-          )
-      ),
-    );
+                                  print('try logging in to facebook');
+                                })
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: _createAccountLabel(),
+                          ),
+                        ]))),
+              )));
+    }));
   }
 }

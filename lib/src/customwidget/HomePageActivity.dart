@@ -71,17 +71,12 @@ class _MyHomePageState extends State<HomePageActivity> {
 
   void getCurrentLocation() async {
     try {
-
       Uint8List imageData = await getMarker();
       var location = await _locationTracker.getLocation();
-
       updateMarkerAndCircle(location, imageData);
-
       if (_locationSubscription != null) {
         _locationSubscription.cancel();
       }
-
-
       _locationSubscription = _locationTracker.onLocationChanged().listen((newLocalData) {
         if (_controller != null) {
           _controller.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
@@ -91,7 +86,6 @@ class _MyHomePageState extends State<HomePageActivity> {
               zoom: 19.00)));
           //18
           updateMarkerAndCircle(newLocalData, imageData);
-
         }
       });
 

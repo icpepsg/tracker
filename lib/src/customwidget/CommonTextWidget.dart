@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
  */
 class CommonTextWidget extends StatelessWidget {
   final String title;
-  final bool isPassword,isNumeric;
+  final bool isPassword,isNumeric,isEmail;
   final Function onSaved, evaluator;
 
   CommonTextWidget({
@@ -14,6 +14,7 @@ class CommonTextWidget extends StatelessWidget {
     this.isNumeric = false,
     this.onSaved,
     this.evaluator,
+    this.isEmail= false,
   });
   @override
   Widget build(BuildContext context) {

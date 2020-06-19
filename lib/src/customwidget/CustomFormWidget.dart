@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:device_info/device_info.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -107,6 +108,8 @@ class _CustomFormWidget extends State<CustomFormWidget> {
             evaluator: (String value) {
               if (value.isEmpty) {
                 return Constants.MSG_ERROR_USERNAME;
+              }else if(!EmailValidator.validate(value)){
+                return Constants.MSG_ERROR_USERNAME_FMT;
               }
               return null;
             },

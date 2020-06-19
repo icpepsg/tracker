@@ -74,14 +74,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState>{
         print(userData);
         print('userData.success '+userData.success.toString());
         if(userData.success){
+          print('Authentication Success...');
           yield LoginIsLoaded(userData);
         }else{
-          print('Authentication failed...');
+          print('Authentication error...');
           yield LoginError(userData.message);
         }
 
       }catch(_){
-        print('Authentication failed...');
+        print('Authentication Exception!!');
         yield LoginInit();
       }
     }

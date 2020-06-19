@@ -25,6 +25,7 @@ class Constants {
       static const MSG_SUCCESS_NEW_ACCOUNT = "Account Successfully Created. Please login with your account";
       static const MSG_ERROR_PASSWORD_FMT = 'Please enter a minimum 8 character password';
       static const MSG_ERROR_MISMATCH = 'Password does not match';
+      static const MSG_ERROR_USERNAME_FMT = 'Invalid Username format';
 
       //URLS
       //static const API_URL_LOGIN = 'http://kelvinco.ml/webapp/login.php';

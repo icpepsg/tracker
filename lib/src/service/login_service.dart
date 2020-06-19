@@ -10,17 +10,12 @@ class LoginService{
     userModel.username =username;
     userModel.password =password;
     final resp = await http.post(Constants.API_URL_LOGIN,headers: {"Content-Type": "application/json"},body: userModelToJson(userModel));
-
     print('LoginService...');
     print('resp.statusCode...' +resp.statusCode.toString());
-
-    if(resp.statusCode != 200 && resp.statusCode != 201)
-     throw Exception();
-
+    //if(resp.statusCode != 200 && resp.statusCode != 201)
+    // throw Exception();
     Map userMap = jsonDecode(resp.body);
-
     var data = UserModel.fromJson(userMap);
-    print('success' +data.success.toString());
 
     return data;
   }
