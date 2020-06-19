@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:tracker/src/common/Constants.dart';
 
@@ -23,12 +25,13 @@ class _MyHomePageState extends State<HomePageActivity> {
   LatLng latlng = new LatLng(0, 0);
   double loclat;
   double loclong;
-
+  DateTime now = new DateTime.now();
   GoogleMapController _controller;
 
   @override
   void initState() {
     super.initState();
+
     getCurrentLocation();
   }
 
@@ -63,9 +66,11 @@ class _MyHomePageState extends State<HomePageActivity> {
           circleId: CircleId("direction"),
           radius: newLocalData.accuracy,
           zIndex: 1,
-          strokeColor: Colors.green,
+          strokeColor: Colors.green[300],
           center: latlng,
-          fillColor: Colors.green.withAlpha(70));
+          fillColor: Colors.green[100]);
+
+      print('now => ' + now.toString() +' => LATITUDE: ${latlng.latitude}   LONGITUDE:  ${latlng.longitude}');
     });
   }
 
@@ -108,22 +113,18 @@ class _MyHomePageState extends State<HomePageActivity> {
   Widget build(BuildContext context) {
     int submit = 0;
     return Container(
-        child:  Container(
            child: Column(
             children: <Widget>[
-             Container(
-                 child: Column(
+             Stack(
+                children: <Widget>[
+                  Column(
                      children: <Widget>[
-                       Container(
-                         alignment: Alignment.center,
-                         height: 100,
-                       ),
                              SizedBox(
                                  width: MediaQuery.of(context).size.width,  // or use fixed size like 200
-                                 height: 300,
+                                 height: MediaQuery.of(context).size.height*.8,
                                  child:
                                  GoogleMap(
-                                   mapType: MapType.hybrid,
+                                   mapType: MapType.normal,
                                    initialCameraPosition: initialLocation,
                                    markers: Set.of((marker != null) ? [marker] : []),
                                    circles: Set.of((circle != null) ? [circle] : []),
@@ -131,46 +132,41 @@ class _MyHomePageState extends State<HomePageActivity> {
                                      _controller = controller;
                                    },
                                  )
-                             )
-                             ,
-
-                             Text( "\n\nLATITUDE: ${latlng.latitude} \n LONGITUDE:  ${latlng.longitude}"),
-
+                             ),
+                             //Text( "\n\nLATITUDE: ${latlng.latitude} \n LONGITUDE:  ${latlng.longitude}"),
                      ]
-                 )
-             ),
-              Expanded(
-                flex: 1,
-                child: SizedBox(),
-              ),
-              Container(
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                      side: BorderSide(color: Colors.green[600])),
-                  onPressed: () {
-                    setState(() {
-                      submit = 1;
-                    });
-                    if(submit ==1){
-                      getCurrentLocation();
-                    }
-                  },
-                  color: Colors.green[600],
-                  textColor: Colors.white,
-                  child: Text("Start Activity".toUpperCase(),
-                      style: TextStyle(fontSize: 15)),
-                ),
-              ),
-
-              Expanded(
-                flex: 1,
-                child: SizedBox(),
-              ),
-
+                 ),
+                  Positioned(
+                    bottom: MediaQuery.of(context).size.height*.1,
+                    child: Center(
+                     // child: Text( "\n\nLATITUDE: ${latlng.latitude} \n LONGITUDE:  ${latlng.longitude}" ,style: TextStyle(color: Colors.green[600])),
+                    )
+                  ),
+                  Positioned(
+                    bottom: MediaQuery.of(context).size.height*.05,
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new OutlineButton(
+                          onPressed: () {
+                          },
+                          borderSide: BorderSide(color: Colors.green[300],width: 3),
+                          shape: StadiumBorder(),
+                          //shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                          
+                          child: new Text(
+                            "Start Activity",
+                            style: new TextStyle(color: Colors.green[300],fontSize: 20),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
             ],
            ),
-        ),
+    ]
+    )
     );
   }
 

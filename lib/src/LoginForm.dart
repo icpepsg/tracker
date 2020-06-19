@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracker/src/Home.dart';
 import 'package:tracker/src/Signup.dart';
@@ -34,6 +35,8 @@ class _LoginFormState extends State<LoginForm> {
       return (prefs.getString('username') ?? null);
     });
     //printUser();
+    DateTime now = new DateTime.now();
+    print('now => ' + now.toString());
   }
 
   Future<void> _setUser(String user) async {
@@ -121,6 +124,8 @@ class _LoginFormState extends State<LoginForm> {
           ),
         );
       }else if (state is LoginIsLoaded){
+
+
         Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       }
     }, child: BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {

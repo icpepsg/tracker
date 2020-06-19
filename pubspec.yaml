@@ -26,6 +26,9 @@ dependencies:
   meta: ^1.1.6
   device_info: ^0.4.2+4
   email_validator: ^1.0.4
+  intl: ^0.16.1
+
+
 dependency_overrides:
   path: 1.7.0
 
