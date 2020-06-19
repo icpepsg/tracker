@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -27,7 +28,8 @@ class _MyHomePageState extends State<HomePageActivity> {
   double loclong;
   DateTime now = new DateTime.now();
   GoogleMapController _controller;
-
+  String dropdownValue = 'RUN/WALK';
+  int _index;
   @override
   void initState() {
     super.initState();
@@ -70,7 +72,7 @@ class _MyHomePageState extends State<HomePageActivity> {
           center: latlng,
           fillColor: Colors.green[100]);
 
-      print('now => ' + now.toString() +' => LATITUDE: ${latlng.latitude}   LONGITUDE:  ${latlng.longitude}');
+      print('now => ' + DateTime.now().toString() +' => LATITUDE: ${latlng.latitude}   LONGITUDE:  ${latlng.longitude}');
     });
   }
 
@@ -112,6 +114,7 @@ class _MyHomePageState extends State<HomePageActivity> {
   @override
   Widget build(BuildContext context) {
     int submit = 0;
+
     return Container(
            child: Column(
             children: <Widget>[
@@ -151,17 +154,69 @@ class _MyHomePageState extends State<HomePageActivity> {
                         new OutlineButton(
                           onPressed: () {
                           },
-                          borderSide: BorderSide(color: Colors.green[300],width: 3),
+                          borderSide: BorderSide(color: Colors.pink[100],width: 3),
                           shape: StadiumBorder(),
                           //shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                          
+
                           child: new Text(
                             "Start Activity",
-                            style: new TextStyle(color: Colors.green[300],fontSize: 20),
+                            style: new TextStyle(color: Colors.pink[300],fontSize: 20),
                           ),
                         ),
                       ],
                     ),
+                  ),
+                  Positioned(
+                    top: MediaQuery.of(context).size.height*.05,
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        OutlineButton.icon(
+                            onPressed: (){},
+                          label: Text(dropdownValue,style: new TextStyle(color: Colors.pink[300],fontSize: 20)),
+                          icon: Icon(Icons.arrow_drop_down),
+                          shape: StadiumBorder(),
+                          borderSide: BorderSide(color: Colors.pink[100],width: 3),
+                        )
+                      ],
+                    ),
+                  ),
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 78.0),
+                        child: SizedBox(
+                               height: 116, // card height
+                              child: PageView.builder(
+                                itemCount: 3, // how many items do we have
+                                controller: PageController(viewportFraction: 0.9),
+                                onPageChanged: (int index) {
+                                },
+                                itemBuilder: (_, i) {
+                                  return Transform.scale(
+                                    scale: i == _index ? 1 : 0.9,
+                                      child: new Container(
+                                      height: 116.00,
+                                      width: 325.00,
+                                      decoration: BoxDecoration(
+                                      color: Color(0xffffffff),
+                                      boxShadow: [
+                                        BoxShadow(
+                                        offset: Offset(0.5, 0.5),
+                                        color:
+                                        Color(0xff000000).withOpacity(0.12),
+                                        blurRadius: 20,
+                                        ),
+                                        ],
+                                        borderRadius: BorderRadius.circular(10.00),
+                                      ),
+                                      )
+                                  );
+                                }
+                              ),
+                        )
+                      )
                   )
             ],
            ),
@@ -169,5 +224,7 @@ class _MyHomePageState extends State<HomePageActivity> {
     )
     );
   }
+
+
 
 }

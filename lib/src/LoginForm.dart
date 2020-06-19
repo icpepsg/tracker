@@ -72,6 +72,7 @@ class _LoginFormState extends State<LoginForm> {
       onTap: () async {
         if (_formKey.currentState.validate()) {
           _formKey.currentState.save();
+          _setUser(userModel.username);
           loginBloc.add(AuthLogin(userModel.username, userModel.password));
 
         }
