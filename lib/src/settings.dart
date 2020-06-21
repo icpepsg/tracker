@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tracker/main.dart';
 import 'package:tracker/src/common/Constants.dart';
 import 'package:tracker/src/customwidget/ImageContainer.dart';
 
@@ -18,7 +16,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final _formKey = GlobalKey<FormState>();
   bool isSwitched = false;
   @override
   void initState() {

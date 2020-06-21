@@ -14,7 +14,7 @@ class _CircularLoadingAnimationState extends State<CircularLoadingAnimation> wit
   AnimationController _radialProgressAnimationController;
   Animation<double> _progressAnimation;
   final Duration fadeInDuration = Duration(milliseconds: 10);
-  final Duration fillDuration = Duration(seconds: 1);
+  final Duration fillDuration = Duration(seconds: 2);
 
   double progressDegrees = 0;
   var count = 0;

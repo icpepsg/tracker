@@ -5,7 +5,6 @@ import 'package:tracker/src/bloc/login_bloc.dart';
 import 'package:tracker/src/customwidget/CircularLoadingAnimation.dart';
 import 'package:tracker/src/service/login_service.dart';
 import 'Home.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 /*
  Author : kelvin Co
@@ -18,8 +17,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-
+ // final _formKey = GlobalKey<FormState>();
+  LoginService loginService;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset: false,
       body: Container(
         child: BlocProvider(
-            builder: (context) => LoginBloc(LoginService()),
+            create: (context) => LoginBloc(LoginService()),
             child: Container(child:
                 // ignore: missing_return
                 BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
@@ -40,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
               else if (state is LoginIsLoaded)
                 return Home();
               else if (state is LoginError)
-                return Login();
+                return Login(loginService: loginService,);
             }))),
       ),
     ),debugShowCheckedModeBanner: false,);

@@ -2,7 +2,6 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracker/src/Home.dart';
 import 'package:tracker/src/Signup.dart';
@@ -42,16 +41,6 @@ class _LoginFormState extends State<LoginForm> {
   Future<void> _setUser(String user) async {
     final SharedPreferences prefs = await _prefs;
     prefs.setString("username", user);
-  }
-
-  Future<void> _setToken(String token) async {
-    final SharedPreferences prefs = await _prefs;
-    prefs.setString("token", token);
-  }
-
-  Future<void> _setPicture(String picture) async {
-    final SharedPreferences prefs = await _prefs;
-    prefs.setString("picture", picture);
   }
 
   Future<String> _getUser() async {

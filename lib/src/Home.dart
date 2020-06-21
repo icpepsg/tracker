@@ -1,7 +1,6 @@
-import 'package:intl/intl.dart';
 import 'package:tracker/src/common/Constants.dart';
+import 'package:tracker/src/customwidget/map_page.dart';
 import 'customwidget/ImageContainer.dart';
-import 'customwidget/HomePageActivity.dart';
 import 'package:flutter/material.dart';
 
 import 'customwidget/Profile.dart';
@@ -25,7 +24,7 @@ class _HomeState extends State<Home> {
   }
 
   final List<Widget> _children = [
-    HomePageActivity(),
+    MapPage(),
     Profile(),
   ];
 
@@ -71,18 +70,18 @@ class _HomeState extends State<Home> {
       ),*/
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex, // this will be set when a new tab is tapped
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.green[700],
+        selectedItemColor: Colors.green[700],
+        unselectedItemColor: Colors.black,
         iconSize: 20,
         items: [
           BottomNavigationBarItem(
             icon: new Icon(Icons.home),
-            title: new Text('Home',style: TextStyle(color: Colors.green[700])),
+            title: new Text('Home',style: TextStyle(color: Colors.black)),
           ),
 
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            title: new Text('Profile',style: TextStyle(color: Colors.green[700])),
+            title: new Text('Profile',style: TextStyle(color: Colors.black)),
           )
         ],
         onTap: (index){

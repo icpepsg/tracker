@@ -68,8 +68,8 @@ class Profile extends StatelessWidget {
               child: Column(
                 children: [
                   ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text('Profile'),
+                    leading: Icon(Icons.history),
+                    title: Text('History'),
                     trailing: Icon(Icons.arrow_forward_ios),
                     enabled: true,
                     onTap: () {},

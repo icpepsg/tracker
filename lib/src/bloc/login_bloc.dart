@@ -6,7 +6,6 @@ import 'package:tracker/src/service/login_service.dart';
 
 class LoginEvent extends Equatable{
   @override
-  // TODO: implement props
   List<Object> get props => [];
 
 }
@@ -17,14 +16,12 @@ class AuthLogin extends LoginEvent{
   AuthLogin(this._username,this._password);
 
   @override
-  // TODO: implement props
   List<Object> get props => [_username,_password];
 }
 
 
 class LoginState extends Equatable{
   @override
-  // TODO: implement props
   List<Object> get props => [];
 
 }
@@ -41,7 +38,6 @@ class LoginIsLoaded extends LoginState{
   LoginIsLoaded(this._credential);
   UserModel get getCredential => _credential;
   @override
-  // TODO: implement props
   List<Object> get props => [_credential];
 }
 
@@ -50,7 +46,6 @@ class LoginError extends LoginState{
   LoginError(this._message);
   String get getMessage => _message;
   @override
-  // TODO: implement props
   List<Object> get props => [_message];
 }
 
@@ -61,12 +56,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState>{
   LoginBloc(this.loginService);
 
   @override
-  // TODO: implement initialState
   LoginState get initialState => LoginInit();
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async*{
-    // TODO: implement mapEventToState
+
     if(event is AuthLogin){
       yield LoginIsLoading();
       try{
