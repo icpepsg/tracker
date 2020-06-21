@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracker/src/common/Constants.dart';
 import 'package:tracker/src/customwidget/ImageContainer.dart';
+import 'package:tracker/src/service/theme_service.dart';
 
 /*
  Author : kelvin Co
@@ -17,6 +19,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   bool isSwitched = false;
+  bool isDarkOn = false;
   @override
   void initState() {
     super.initState();
@@ -24,12 +27,12 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-
+    final themeBloc = BlocProvider.of<ThemeBloc>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(Icons.menu, color: Colors.white),
+          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Row(
@@ -57,11 +60,12 @@ class _SettingsPageState extends State<SettingsPage> {
             leading: Icon(Icons.data_usage),
             title: Text('Enable Background Activity'),
             trailing: Switch(
-              value: isSwitched,
+              value: isDarkOn,
               onChanged: (value){
                 setState(() {
-                  isSwitched=value;
-                  print(isSwitched);
+                  isDarkOn=value;
+                  print(isDarkOn);
+
                 });
               },
               activeTrackColor: Colors.lightGreenAccent,
@@ -81,7 +85,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 setState(() {
                   isSwitched=value;
                   print(isSwitched);
-                  
+                  themeBloc.add(ThemeEvent.toggle);
                   //context.bloc<ThemeBloc>().add(ThemeEvent.toggle);
                 });
               },

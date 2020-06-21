@@ -215,7 +215,7 @@ class _MapPageState extends State<MapPage> {
                                                   bearing: 192.8334901395799,
                                                   target: LatLng(latlng.latitude, latlng.longitude),
                                                   tilt: 0,
-                                                  zoom: 14.00))).then((val) {setState(() {});});
+                                                  zoom: 17.00))).then((val) {setState(() {});});
 
                                             },
                                           )
@@ -296,7 +296,7 @@ class _MapPageState extends State<MapPage> {
                                                   target: LatLng(double.tryParse(MarkerService.markersList[index].latitude),
                                                       double.tryParse(MarkerService.markersList[index].longitude)),
                                                   tilt: 0,
-                                                  zoom: 14.00)));
+                                                  zoom: 16.00)));
                                             }
                                             getMarkers();
                                             // locationController.animateCamera(CameraUpdate.newCameraPosition(newCameraPosition)).then((value) => null);

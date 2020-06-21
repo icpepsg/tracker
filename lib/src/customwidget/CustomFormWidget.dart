@@ -48,7 +48,7 @@ class _CustomFormWidget extends State<CustomFormWidget> {
               '##############################################################');
           print('Success = ${data.success}');
           print('Message =  ${data.message}.');
-          if (data.success.toString() == "1") {
+          if (data.success) {
             showDialog(
                 context: context,
                 builder: (_) => AlertDialog(
@@ -59,8 +59,7 @@ class _CustomFormWidget extends State<CustomFormWidget> {
                         FlatButton(
                           child: Text("OK"),
                           onPressed: () {
-                            Navigator.of(context)
-                                .pop(); //close Dialog box before moving to next page
+                            Navigator.of(context).pop(); //close Dialog box before moving to next page
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -79,8 +78,8 @@ class _CustomFormWidget extends State<CustomFormWidget> {
                         FlatButton(
                           child: Text("OK"),
                           onPressed: () {
-                            Navigator.of(context)
-                                .pop(); //close Dialog box before moving to next page
+                            Navigator.of(context).pop(); //close Dialog box before moving to next page
+
                           },
                         )
                       ],
