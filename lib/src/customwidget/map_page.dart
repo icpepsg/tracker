@@ -35,7 +35,7 @@ class _MapPageState extends State<MapPage> {
   //Completer<GoogleMapController> _controller = Completer();
   GoogleMapController mapController;
   CameraPosition newCameraPosition =
-  CameraPosition(target: LatLng(36.6993, 3.1755), zoom: 10);
+  CameraPosition(target: LatLng(14.259504, 121.133800), zoom: 16);
 
   @override
   void initState() {
@@ -158,6 +158,10 @@ class _MapPageState extends State<MapPage> {
           //18
           //updateMarkerAndCircle(newLocalData, imageData);
           latlng = LatLng(newLocalData.latitude, newLocalData.longitude);
+          newCameraPosition =  CameraPosition(
+            target: LatLng(14.259504, 121.133800),
+            zoom: 14.4746,
+          );
         }
       });
       print('LATITUDE: ${latlng.latitude} \n LONGITUDE:  ${latlng.longitude}');
@@ -195,25 +199,27 @@ class _MapPageState extends State<MapPage> {
                                     child: ValueListenableBuilder(
                                         valueListenable: valueNotifier, // that's the value we are listening to
                                         builder: (context, value, child) {
-                                          return  (latlng.latitude!=null) ? GoogleMap(
+                                          return  (latlng.latitude!=null && latlng.latitude != 0.0) ? GoogleMap(
                                             mapType: MapType.normal,
-                                            initialCameraPosition: initialLocation,
+                                            //initialCameraPosition: initialLocation,
+                                            initialCameraPosition: newCameraPosition,
                                             myLocationEnabled: true,
                                             markers: markers,
                                             //markers: Set.of((marker != null) ? [marker] : []),
                                             circles: Set.of((circle != null) ? [circle] : []),
                                             onMapCreated: (GoogleMapController controller) {
                                               mapController = controller;
-                                              print('mapController ' +mapController.toString());
+                                              print('latlng.latitude ' +latlng.latitude.toString());
+                                              print('latlng.longitude ' +latlng.longitude.toString());
                                               mapController.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
                                                   bearing: 192.8334901395799,
                                                   target: LatLng(latlng.latitude, latlng.longitude),
                                                   tilt: 0,
-                                                  zoom: 14.00)));
+                                                  zoom: 14.00))).then((val) {setState(() {});});
 
                                             },
                                           )
-                                          : CircularProgressIndicator()
+                                          : Scaffold(body:Center(child: CircularProgressIndicator(),))
                                           ;
                                         }),
                                   ),
