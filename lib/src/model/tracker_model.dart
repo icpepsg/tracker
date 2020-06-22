@@ -11,20 +11,28 @@ String trackerModelToJson(TrackerModel data) => json.encode(data.toJson());
 class TrackerModel {
   TrackerModel({
     this.deviceId,
+    this.success,
+    this.message,
     this.datalist,
   });
 
-  String deviceId;
-  Datalist datalist;
+  int deviceId;
+  String success;
+  String message;
+  List<Datalist> datalist;
 
   factory TrackerModel.fromJson(Map<String, dynamic> json) => TrackerModel(
     deviceId: json["device_id"],
-    datalist: Datalist.fromJson(json["datalist"]),
+    success: json["success"],
+    message: json["message"],
+    datalist: List<Datalist>.from(json["datalist"].map((x) => Datalist.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "device_id": deviceId,
-    "datalist": datalist.toJson(),
+    "success": success,
+    "message": message,
+    "datalist": List<dynamic>.from(datalist.map((x) => x.toJson())),
   };
 }
 
@@ -36,7 +44,7 @@ class Datalist {
     this.createdatetime,
   });
 
-  int activityId;
+  String activityId;
   String longitude;
   String latitude;
   DateTime createdatetime;
