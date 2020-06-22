@@ -4,6 +4,7 @@ import 'package:device_info/device_info.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:tracker/src/common/Constants.dart';
 import 'package:tracker/src/customwidget/CommonTextWidget.dart';
@@ -44,46 +45,14 @@ class _CustomFormWidget extends State<CustomFormWidget> {
           http.Response result = await submitData();
           Map userMap = jsonDecode(result.body);
           var data = UserModel.fromJson(userMap);
-          print(
-              '##############################################################');
+          print('##############################################################');
           print('Success = ${data.success}');
           print('Message =  ${data.message}.');
           if (data.success) {
-            showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                      title: Text("Success"),
-                      content: Text(Constants
-                          .MSG_SUCCESS_NEW_ACCOUNT), // can be replaced by message from API
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text("OK"),
-                          onPressed: () {
-                            Navigator.of(context).pop(); //close Dialog box before moving to next page
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginPage()));
-                          },
-                        )
-                      ],
-                    ));
+            showToast(Colors.green,data.message.toString());
+            Navigator.push(context,MaterialPageRoute(builder: (context) => LoginPage()));
           } else {
-            showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                      title: Text("Failed"),
-                      content: Text(data.message.toString()),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text("OK"),
-                          onPressed: () {
-                            Navigator.of(context).pop(); //close Dialog box before moving to next page
-
-                          },
-                        )
-                      ],
-                    ));
+            showToast(Colors.red,data.message.toString());
           }
         }
       },
@@ -92,6 +61,18 @@ class _CustomFormWidget extends State<CustomFormWidget> {
       ),
     );
   }
+  void showToast(Color bgColor,String msg) {
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: bgColor,
+        textColor: Colors.white,
+        timeInSecForIosWeb: 3);
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
