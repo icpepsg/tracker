@@ -25,6 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(Duration(seconds: 6), () {
       printUser();
+      print('Date now : ' +DateTime.now().toString());
     });
     MarkerService.markersList.add(MarkerModel(
         1,

@@ -6,18 +6,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracker/src/LoginPage.dart';
 import 'package:tracker/src/settings.dart';
 
+class Profile extends StatefulWidget {
+  Profile({Key key}) : super(key: key);
+  @override
+  _ProfileState createState() => _ProfileState();
+}
 
-
-class Profile extends StatelessWidget {
+class _ProfileState extends State<Profile> {
   static FacebookLogin get facebookSignIn => new FacebookLogin();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(children: <Widget>[
-      Container(
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
+              Container(
+              height: MediaQuery.of(context).size.height,
+               decoration: BoxDecoration(gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [Colors.grey[200], Colors.grey[300]])),
@@ -31,7 +34,7 @@ class Profile extends StatelessWidget {
           Center(
             child: Container(
                 height: MediaQuery.of(context).size.height * .2,
-                width: MediaQuery.of(context).size.width * .8,
+                width: MediaQuery.of(context).size.width * .9,
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
                         begin: Alignment.topCenter,
@@ -56,7 +59,7 @@ class Profile extends StatelessWidget {
           Center(
             child: Container(
               height: MediaQuery.of(context).size.height * .5,
-              width: MediaQuery.of(context).size.width * .8,
+              width: MediaQuery.of(context).size.width * .9,
               decoration: BoxDecoration(
                   gradient: LinearGradient(
                       begin: Alignment.topCenter,
@@ -95,10 +98,11 @@ class Profile extends StatelessWidget {
                       trailing: Icon(Icons.arrow_forward_ios),
                       enabled: true,
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => SettingsPage()));
-                      }
-                  ),
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SettingsPage()));
+                      }),
                   ListTile(
                     leading: Icon(Icons.exit_to_app),
                     title: Text('Log out'),
@@ -111,7 +115,8 @@ class Profile extends StatelessWidget {
                       prefs.clear();
                       await facebookSignIn.logOut();
 
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()));
                     },
                   ),
                 ],
