@@ -17,7 +17,7 @@ class TrackerModel {
   });
 
   int deviceId;
-  String success;
+  bool success;
   String message;
   List<Datalist> datalist;
 
