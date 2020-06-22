@@ -67,30 +67,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  SizedBox(
-                    height: 150,
-                  ),
-                ],
-              ),
-              Center(
-                child: Column(
-                  children: <Widget>[
-                    CircularLoadingAnimation(),
-                  ],
-                ),
-              ),
-              //CircleProgress(),
-            ],
-          ),
-        ],
-      ),
-    );
+        body: Container(
+            child: Center(child: CircularLoadingAnimation())));
   } // end build
 
 }
