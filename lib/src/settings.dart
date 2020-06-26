@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracker/src/common/Constants.dart';
 import 'package:tracker/src/customwidget/ImageContainer.dart';
 import 'package:tracker/src/service/theme_service.dart';
@@ -18,11 +19,28 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   bool isSwitched = false;
   bool isDarkOn = false;
   @override
   void initState() {
     super.initState();
+    getDarkMode();
+  }
+  void getDarkMode() async{
+    isDarkOn = await _getTheme();
+  }
+
+  Future<bool> _getTheme() async {
+    final SharedPreferences prefs = await _prefs;
+    isDarkOn = prefs.getBool('isDarkMode');
+    return prefs.getBool('isDarkMode');
+  }
+
+  Future<void> _setTheme(bool theme) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setBool("isDarkMode", theme);
   }
 
   @override
@@ -54,47 +72,50 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         ),
       ),
-      body: Column(
-        children: [
-          ListTile(
-            leading: Icon(Icons.data_usage),
-            title: Text('Enable Background Activity'),
-            trailing: Switch(
-              value: isDarkOn,
-              onChanged: (value){
-                setState(() {
-                  isDarkOn=value;
-                  print(isDarkOn);
+      body: FutureBuilder(
+        future: _getTheme(),
+        builder: (context,snapshot){
+          return (isDarkOn!=null) ? Column(
+            children: [
+              ListTile(
+                leading: Icon(Icons.data_usage),
+                title: Text('Enable Background Activity'),
+                trailing: Switch(
+                  value: isSwitched,
+                  onChanged: (value){
+                    setState(() {
+                      isSwitched=value;
+                      print(isSwitched);
 
-                });
-              },
-              activeTrackColor: Colors.lightGreenAccent,
-              activeColor: Colors.green,
-            ),
-          ),
-         // BlocBuilder<ThemeEvent, ThemeData>(
+                    });
+                  },
+                  activeTrackColor: Colors.lightGreenAccent,
+                  activeColor: Colors.green,
+                ),
+              ),
 
-         // ),
-
-          ListTile(
-            leading: Icon(Icons.palette),
-            title: Text('Enable Dark Mode'),
-            trailing: Switch(
-              value: isSwitched,
-              onChanged: (value){
-                setState(() {
-                  isSwitched=value;
-                  print(isSwitched);
-                  themeBloc.add(ThemeEvent.toggle);
-                  //context.bloc<ThemeBloc>().add(ThemeEvent.toggle);
-                });
-              },
-              activeTrackColor: Colors.lightGreenAccent,
-              activeColor: Colors.green,
-            ),
-          ),
-        ],
-      ),
+              ListTile(
+                leading: Icon(Icons.palette),
+                title: Text('Enable Dark Mode'),
+                trailing: Switch(
+                  value: isDarkOn,
+                  onChanged: (value){
+                    setState(() {
+                      isDarkOn=value;
+                      print(isDarkOn);
+                      themeBloc.add(ThemeEvent.toggle);
+                      //context.bloc<ThemeBloc>().add(ThemeEvent.toggle);
+                      _setTheme(value);
+                    });
+                  },
+                  activeTrackColor: Colors.lightGreenAccent,
+                  activeColor: Colors.green,
+                ),
+              )
+            ],
+          ) : Scaffold(body: Center(child: CircularProgressIndicator(),),);
+        },
+      )
     );
   } // end build
 

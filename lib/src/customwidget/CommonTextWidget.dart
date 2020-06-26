@@ -28,7 +28,7 @@ class CommonTextWidget extends StatelessWidget {
           TextFormField(
             obscureText: isPassword,
             onSaved: onSaved,
-            keyboardType: isNumeric ? TextInputType.phone : TextInputType.text ,
+            keyboardType: isNumeric ? TextInputType.phone : TextInputType.emailAddress ,
             inputFormatters: isNumeric ? [LengthLimitingTextInputFormatter(11),] : [LengthLimitingTextInputFormatter(50),],
 
             //style: TextStyle(color: Colors.black,height: 1.0,),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracker/src/SplashScreen.dart';
 import 'package:tracker/src/service/bloc_delegate.dart';
 import 'package:tracker/src/service/theme_service.dart';
@@ -14,7 +15,34 @@ void main() {
 }
 
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  MyApp({Key key}) : super(key: key);
+  @override
+  _MyAppState createState() => _MyAppState();
+
+}
+
+class _MyAppState extends State<MyApp>{
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  bool isDarkOn = false;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void getDarkMode() async{
+    isDarkOn = await _getTheme();
+    print('isDarkOn : ' +isDarkOn.toString());
+    isDarkOn ? ThemeData.light() : ThemeData.dark() ;
+  }
+
+  Future<bool> _getTheme() async {
+    final SharedPreferences prefs = await _prefs;
+    isDarkOn = prefs.getBool('isDarkMode');
+    return prefs.getBool('isDarkMode');
+  }
+
+
 
   // This widget is the root of your application.
   @override

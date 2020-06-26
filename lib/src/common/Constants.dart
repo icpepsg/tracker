@@ -34,4 +34,5 @@ class Constants {
       static const API_URL_SIGN_UP = 'http://ec2-54-179-155-193.ap-southeast-1.compute.amazonaws.com/api/users/signup';
       static const API_URL_FACEBOOK_TOKEN = 'https://graph.facebook.com/v2.3/me?fields=email,id,first_name,last_name,middle_name,name,name_format,picture.width(500).height(500),short_name&access_token=';
       static const API_URL_DEFAULT_PHOTO  = 'http://kelvinco.ml/default_photo.png';
+      static const API_URL_MARKERS = '';
 }
