@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracker/src/common/Constants.dart';
 import 'package:tracker/src/service/marker_service.dart';
 
@@ -21,7 +22,10 @@ Set<Marker> markers = {};
 int _index = 0;
 int indexMarker;
 ValueNotifier valueNotifier = ValueNotifier(indexMarker);
+
 class _MapPageState extends State<MapPage> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  bool isTrackingActive = false;
   StreamSubscription _locationSubscription;
   Location _locationTracker = Location();
   Marker marker;
@@ -39,6 +43,7 @@ class _MapPageState extends State<MapPage> {
 
   @override
   void initState() {
+    _getIsTrackingActive();
     getCurrentLocation();
     super.initState();
     getMarkers();
@@ -50,7 +55,19 @@ class _MapPageState extends State<MapPage> {
   );
   //default cameraposition
 
+  Future<bool> _getIsTrackingActive() async {
+    final SharedPreferences prefs = await _prefs;
+    //initialize state here
+    setState(() {
+      (prefs.getBool('isTrackingActive')!=null) ? isTrackingActive =prefs.getBool('isTrackingActive') : isTrackingActive = false;
+    });
+    return isTrackingActive;
+  }
 
+  Future<void> _setIsTrackingActive(bool value) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setBool("isTrackingActive", value);
+  }
 
   Future<Uint8List> getMarker() async {
     ByteData byteData = await DefaultAssetBundle.of(context).load(Constants.IMG_ARROW);
@@ -151,7 +168,7 @@ class _MapPageState extends State<MapPage> {
       _locationSubscription = _locationTracker.onLocationChanged().listen((newLocalData) {
         if (locationController != null) {
           locationController.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
-              bearing: 192.8334901395799,
+              bearing: 0,
               target: LatLng(newLocalData.latitude, newLocalData.longitude),
               tilt: 0,
               zoom: 17.00)));
@@ -204,6 +221,7 @@ class _MapPageState extends State<MapPage> {
                                             //initialCameraPosition: initialLocation,
                                             initialCameraPosition: newCameraPosition,
                                             myLocationEnabled: true,
+                                            zoomGesturesEnabled: true,
                                             markers: markers,
                                             //markers: Set.of((marker != null) ? [marker] : []),
                                             circles: Set.of((circle != null) ? [circle] : []),
@@ -212,7 +230,7 @@ class _MapPageState extends State<MapPage> {
                                               print('latlng.latitude ' +latlng.latitude.toString());
                                               print('latlng.longitude ' +latlng.longitude.toString());
                                               mapController.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
-                                                  bearing: 192.8334901395799,
+                                                  bearing: 0,
                                                   target: LatLng(latlng.latitude, latlng.longitude),
                                                   tilt: 0,
                                                   zoom: 17.00))).then((val) {setState(() {});});
@@ -238,18 +256,40 @@ class _MapPageState extends State<MapPage> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  new OutlineButton(
-                                    onPressed: () {
+                                  FutureBuilder(
+                                    future: _getIsTrackingActive(),
+                                    builder: (context,snapshot){
+                                      return (isTrackingActive!=null) ?
+                                      (isTrackingActive) ?
+                                        OutlineButton(
+                                        onPressed: () {
+                                          print('isTrackingActive=> $isTrackingActive');
+                                          setState(() {
+                                            isTrackingActive=false;
+                                            _setIsTrackingActive(isTrackingActive);
+                                          });
+                                        },
+                                        borderSide: BorderSide(color: Colors.pink[100],width: 3),
+                                        shape: StadiumBorder(),
+                                        child: Text("End Activity",style: new TextStyle(color: Colors.pink[300],fontSize: 20),
+                                        ),
+                                      )
+                                      : OutlineButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            isTrackingActive=true;
+                                            _setIsTrackingActive(isTrackingActive);
+                                          });
+                                          print('isTrackingActive=> $isTrackingActive');
+                                        },
+                                        borderSide: BorderSide(color: Colors.green[100],width: 3),
+                                        shape: StadiumBorder(),
+                                        child: Text("Start Activity",style: new TextStyle(color: Colors.green[300],fontSize: 20),
+                                        ),
+                                      )
+                                      : CircularProgressIndicator();
                                     },
-                                    borderSide: BorderSide(color: Colors.pink[100],width: 3),
-                                    shape: StadiumBorder(),
-                                    //shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-
-                                    child: new Text(
-                                      "Start Activity",
-                                      style: new TextStyle(color: Colors.pink[300],fontSize: 20),
-                                    ),
-                                  ),
+                                  )
                                 ],
                               ),
                             ),
@@ -292,7 +332,7 @@ class _MapPageState extends State<MapPage> {
                                               newCameraPosition =  CameraPosition(target: newPosition, zoom: 14,);
                                               print(newCameraPosition);
                                               mapController.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
-                                                  bearing: 192.8334901395799,
+                                                  bearing: 0,
                                                   target: LatLng(double.tryParse(MarkerService.markersList[index].latitude),
                                                       double.tryParse(MarkerService.markersList[index].longitude)),
                                                   tilt: 0,

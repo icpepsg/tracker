@@ -10,22 +10,29 @@ String markersModelToJson(MarkersModel data) => json.encode(data.toJson());
 
 class MarkersModel {
   MarkersModel({
+    this.longitude,
+    this.latitude,
     this.city,
     this.success,
     this.message,
   });
-
+  double longitude;
+  double latitude;
   List<City> city;
   bool success;
   String message;
 
   factory MarkersModel.fromJson(Map<String, dynamic> json) => MarkersModel(
+    longitude: json["longitude"],
+    latitude: json["latitude"],
     city: List<City>.from(json["city"].map((x) => City.fromJson(x))),
     success: json["success"],
     message: json["message"],
   );
 
   Map<String, dynamic> toJson() => {
+    "longitude": longitude,
+    "latitude": latitude,
     "city": List<dynamic>.from(city.map((x) => x.toJson())),
     "success": success,
     "message": message,
