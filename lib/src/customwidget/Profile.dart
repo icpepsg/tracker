@@ -4,6 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracker/src/LoginPage.dart';
+import 'package:tracker/src/history_page.dart';
+import 'file:///C:/Users/kid/AndroidStudioProjects3/tracker/lib/src/history.dart';
 import 'package:tracker/src/settings.dart';
 
 class Profile extends StatefulWidget {
@@ -95,7 +97,7 @@ class _ProfileState extends State<Profile> {
                             title: Text('History'),
                             trailing: Icon(Icons.arrow_forward_ios),
                             enabled: true,
-                            onTap: () {},
+                            onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => HistoryPage()));},
                           ),
                           ListTile(
                               leading: Icon(Icons.info_outline),

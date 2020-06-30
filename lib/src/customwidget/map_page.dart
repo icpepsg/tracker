@@ -3,12 +3,19 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:tracker/src/common/Constants.dart';
+import 'package:tracker/src/model/location_model.dart';
+import 'package:tracker/src/service/DatabaseHelper.dart';
+
+import 'package:tracker/src/service/device_id.dart';
 import 'package:tracker/src/service/marker_service.dart';
+import 'package:screen/screen.dart';
 
 class MapPage extends StatefulWidget {
 
@@ -40,6 +47,10 @@ class _MapPageState extends State<MapPage> {
   GoogleMapController mapController;
   CameraPosition newCameraPosition =
   CameraPosition(target: LatLng(14.259504, 121.133800), zoom: 16);
+  LocationModel locationModel = new  LocationModel();
+  String deviceId;
+  DatabaseHelper helper = DatabaseHelper();
+  String maxId ;
 
   @override
   void initState() {
@@ -48,15 +59,14 @@ class _MapPageState extends State<MapPage> {
     super.initState();
     getMarkers();
   }
-
-  static final CameraPosition initialLocation = CameraPosition(
-    target: LatLng(14.259504, 121.133800),
-    zoom: 14.4746,
-  );
-  //default cameraposition
+  Future<String> getDid() async{
+    final SharedPreferences prefs = await _prefs;
+    return prefs.getString('deviceId');
+  }
 
   Future<bool> _getIsTrackingActive() async {
     final SharedPreferences prefs = await _prefs;
+    deviceId = prefs.getString('deviceId');
     //initialize state here
     setState(() {
       (prefs.getBool('isTrackingActive')!=null) ? isTrackingActive =prefs.getBool('isTrackingActive') : isTrackingActive = false;
@@ -79,18 +89,18 @@ class _MapPageState extends State<MapPage> {
 
     latlng = LatLng(newLocalData.latitude, newLocalData.longitude);
 
-
-
     this.setState(() {
-      marker = Marker(
-          markerId: MarkerId("home"),
-          position: latlng,
-          rotation: newLocalData.heading,
-          draggable: false,
-          zIndex: 2,
-          flat: true,
-          anchor: Offset(0.5, 0.5),
-          icon: BitmapDescriptor.fromBytes(imageData));
+      markers.add(
+          Marker(
+              markerId: MarkerId("home"),
+              position: latlng,
+              rotation: newLocalData.heading,
+              draggable: false,
+              zIndex: 2,
+              flat: true,
+              anchor: Offset(0.5, 0.5),
+              icon: BitmapDescriptor.fromBytes(imageData))
+            );
       //flat --> icon will be stick into the map
       circle = Circle(
           circleId: CircleId("direction"),
@@ -154,6 +164,38 @@ class _MapPageState extends State<MapPage> {
 
     valueNotifier.value = indexMarker;
   }
+  Future<String> getMax() async{
+    var aId = await  helper.getMaxId();
+    return aId;
+  }
+
+  void insertLocation(String a,String b) async{
+    getMax().then((valueA){
+      locationModel.activityId = valueA ;
+      print('locationModel.activityId = > ' +valueA.toString());
+      getDid().then((valueB){
+        locationModel.deviceId = valueB ;
+        print('locationModel.deviceId = > ' +valueB.toString());
+        locationModel.latitude  = a ;
+        locationModel.longitude = b ;
+        locationModel.timestamp = DateTime.now().toString();
+        insert().then((valueC){
+          print('result.int = > ' +valueC.toString());
+        });
+      });
+    });
+
+  }
+  Future<int> insert() async{
+    int result;
+    if (locationModel.id != null) {
+      result = await helper.updateRecord(locationModel);
+    } else {
+      result = await helper.insert(locationModel);
+    }
+    return result;
+  }
+
   void getCurrentLocation() async {
     try {
 
@@ -166,22 +208,23 @@ class _MapPageState extends State<MapPage> {
         _locationSubscription.cancel();
       }
       _locationSubscription = _locationTracker.onLocationChanged().listen((newLocalData) {
-        if (locationController != null) {
-          locationController.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
+        if (mapController != null) {
+          mapController.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
               bearing: 0,
               target: LatLng(newLocalData.latitude, newLocalData.longitude),
               tilt: 0,
               zoom: 17.00)));
-          //18
-          //updateMarkerAndCircle(newLocalData, imageData);
-          latlng = LatLng(newLocalData.latitude, newLocalData.longitude);
-          newCameraPosition =  CameraPosition(
-            target: LatLng(14.259504, 121.133800),
-            zoom: 14.4746,
-          );
+
+          updateMarkerAndCircle(newLocalData, imageData);
+          if(isTrackingActive){
+            insertLocation(latlng.latitude.toString(),latlng.longitude.toString());
+           // print('LATITUDE: ${latlng.latitude}  LONGITUDE:  ${latlng.longitude}' +' Timestamp : ' +DateTime.now().toString());
+              //tryThis(latlng.latitude.toString(),latlng.longitude.toString(),DateTime.now().toString());
+              print('Device : $deviceId  LATITUDE: ${latlng.latitude}  LONGITUDE:  ${latlng.longitude}' +' Timestamp : ' +DateTime.now().toString());
+          }
         }
       });
-      print('LATITUDE: ${latlng.latitude} \n LONGITUDE:  ${latlng.longitude}');
+
     } on PlatformException catch (e) {
       if (e.code == 'PERMISSION_DENIED') {
         debugPrint("Permission Denied");
@@ -218,7 +261,6 @@ class _MapPageState extends State<MapPage> {
                                         builder: (context, value, child) {
                                           return  (latlng.latitude!=null && latlng.latitude != 0.0) ? GoogleMap(
                                             mapType: MapType.normal,
-                                            //initialCameraPosition: initialLocation,
                                             initialCameraPosition: newCameraPosition,
                                             myLocationEnabled: true,
                                             zoomGesturesEnabled: true,
@@ -250,6 +292,7 @@ class _MapPageState extends State<MapPage> {
                                   // child: Text( "\n\nLATITUDE: ${latlng.latitude} \n LONGITUDE:  ${latlng.longitude}" ,style: TextStyle(color: Colors.green[600])),
                                 )
                             ),
+
                             Positioned(
                               bottom: MediaQuery.of(context).size.height*.02,
                               width: MediaQuery.of(context).size.width,
@@ -266,25 +309,27 @@ class _MapPageState extends State<MapPage> {
                                           print('isTrackingActive=> $isTrackingActive');
                                           setState(() {
                                             isTrackingActive=false;
+                                            Screen.keepOn(false);
                                             _setIsTrackingActive(isTrackingActive);
                                           });
                                         },
                                         borderSide: BorderSide(color: Colors.pink[100],width: 3),
                                         shape: StadiumBorder(),
-                                        child: Text("End Activity",style: new TextStyle(color: Colors.pink[300],fontSize: 20),
+                                        child: Text("End Activity",style: new TextStyle(color: Colors.pink[300],fontSize: 20,fontWeight: FontWeight.bold),
                                         ),
                                       )
                                       : OutlineButton(
                                         onPressed: () {
-                                          setState(() {
+                                          setState((){
                                             isTrackingActive=true;
+                                            Screen.keepOn(true);
                                             _setIsTrackingActive(isTrackingActive);
                                           });
                                           print('isTrackingActive=> $isTrackingActive');
                                         },
-                                        borderSide: BorderSide(color: Colors.green[100],width: 3),
+                                        borderSide: BorderSide(color: Colors.green[300],width: 3),
                                         shape: StadiumBorder(),
-                                        child: Text("Start Activity",style: new TextStyle(color: Colors.green[300],fontSize: 20),
+                                        child: Text("Start Activity",style: new TextStyle(color: Colors.green[300],fontSize: 20,fontWeight: FontWeight.bold),
                                         ),
                                       )
                                       : CircularProgressIndicator();
@@ -437,7 +482,9 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
+//***************************************************************
 
+  //***********************************************************************
 
 }
 

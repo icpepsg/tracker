@@ -6,6 +6,7 @@ import 'package:tracker/src/LoginPage.dart';
 import 'package:tracker/src/customwidget/CircularLoadingAnimation.dart';
 import 'package:tracker/src/model/marker_model.dart';
 import 'package:tracker/src/model/markers_model.dart';
+import 'package:tracker/src/service/device_id.dart';
 import 'package:tracker/src/service/marker_service.dart';
 import 'package:geolocator/geolocator.dart';
 import 'Home.dart';
@@ -27,38 +28,27 @@ class _SplashScreenState extends State<SplashScreen> {
   MarkersModel markers =  new MarkersModel();
   Position position ;
   double lat,lng;
-
+  DeviceId deviceId = new DeviceId();
 
   @override
   void initState() {
     super.initState();
     initMarker();
-
+    _setDeviceId();
+    //deviceId.getDeviceId().then((value) {
+    //  print('Device ID : ' +value.toString());
+    //});
     Timer(Duration(seconds: 6), () {
       printUser();
       print('Date now : ' +DateTime.now().toString());
     });
-/*    MarkerService.markersList.add(MarkerModel(
-        1,
-        "Toa Payoh",
-        "Confirmed: 200\nRecovered: 120\nDeaths:19",
-        "1.3404",
-        "103.8453",
-        ""));
-    MarkerService.markersList.add(MarkerModel(
-        2,
-        "Braddell (Shell)",
-        "Confirmed: 100\nRecovered:  20\nDeaths:1",
-        "1.3413",
-        "103.8475",
-        ""));
-    MarkerService.markersList.add(MarkerModel(
-        3,
-        "Bishan",
-        "Confirmed: 20\nRecovered: 10\nDeaths:2",
-        "1.3489",
-        "103.8486",
-        "")); */
+  }
+
+  Future<void> _setDeviceId() async {
+    final SharedPreferences prefs = await _prefs;
+    deviceId.getDeviceId().then((value) {
+      prefs.setString("deviceId", value);
+    });
   }
   Future<String> _getUser() async {
     final SharedPreferences prefs = await _prefs;
