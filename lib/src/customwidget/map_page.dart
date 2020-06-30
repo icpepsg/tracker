@@ -214,7 +214,6 @@ class _MapPageState extends State<MapPage> {
               target: LatLng(newLocalData.latitude, newLocalData.longitude),
               tilt: 0,
               zoom: 17.00)));
-
           updateMarkerAndCircle(newLocalData, imageData);
           if(isTrackingActive){
             insertLocation(latlng.latitude.toString(),latlng.longitude.toString());
