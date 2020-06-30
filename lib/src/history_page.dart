@@ -33,7 +33,7 @@ class _HistoryPageState extends State<HistoryPage> {
         title: Text('History Summary'),
       ),
       body: getHistoryListView(),
-      floatingActionButton: FloatingActionButton(
+ /*     floatingActionButton: FloatingActionButton(
         onPressed: () {
           debugPrint('FAB clicked');
           //navigateToDetail(LocationModel('','', '', '',''), 'Add History');
@@ -41,7 +41,7 @@ class _HistoryPageState extends State<HistoryPage> {
         },
         tooltip: 'Add History',
         child: Icon(Icons.add),
-      ),
+      ),*/
     );
   }
   ListView getHistoryListView() {
@@ -57,7 +57,7 @@ class _HistoryPageState extends State<HistoryPage> {
             //subtitle: Text(this.locationList[position].deviceId),
             onTap: () {
               debugPrint("ListTile Tapped");
-              //navigateToDetail(this.locationList[position],'Edit History');
+               //navigateToDetail(this.locationList[position],'Edit History');
               navigateToDetail2(position);
             },
 
