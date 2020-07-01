@@ -51,7 +51,7 @@ class _MapPageState extends State<MapPage> {
   String deviceId;
   DatabaseHelper helper = DatabaseHelper();
   String maxId ;
-
+  bool incrementFlag;
   @override
   void initState() {
     _getIsTrackingActive();
@@ -165,7 +165,7 @@ class _MapPageState extends State<MapPage> {
     valueNotifier.value = indexMarker;
   }
   Future<String> getMax() async{
-    var aId = await  helper.getMaxId();
+    var aId = await  helper.getMaxId(incrementFlag);
     return aId;
   }
 
@@ -217,6 +217,7 @@ class _MapPageState extends State<MapPage> {
           updateMarkerAndCircle(newLocalData, imageData);
           if(isTrackingActive){
             insertLocation(latlng.latitude.toString(),latlng.longitude.toString());
+            incrementFlag=false;
            // print('LATITUDE: ${latlng.latitude}  LONGITUDE:  ${latlng.longitude}' +' Timestamp : ' +DateTime.now().toString());
               //tryThis(latlng.latitude.toString(),latlng.longitude.toString(),DateTime.now().toString());
               print('Device : $deviceId  LATITUDE: ${latlng.latitude}  LONGITUDE:  ${latlng.longitude}' +' Timestamp : ' +DateTime.now().toString());
@@ -320,6 +321,7 @@ class _MapPageState extends State<MapPage> {
                                       : OutlineButton(
                                         onPressed: () {
                                           setState((){
+                                            incrementFlag=true;
                                             isTrackingActive=true;
                                             Screen.keepOn(true);
                                             _setIsTrackingActive(isTrackingActive);

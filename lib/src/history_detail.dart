@@ -50,7 +50,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
           color: Colors.white,
           elevation: 2.0,
           child: ListTile(
-            title: Text(this.locationList[position].activityId, style: titleStyle,),
+            title: Text('Activity Log no. ' +this.locationList[position].activityId.toString(), style: titleStyle,),
             subtitle: Text(this.locationList[position].deviceId +'\n Lat: ' +this.locationList[position].latitude + ' Lng: ' +this.locationList[position].longitude +'\n ' +this.locationList[position].timestamp),
           ),
         );

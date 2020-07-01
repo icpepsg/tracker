@@ -99,24 +99,33 @@ class DatabaseHelper {
     return list;
   }
 
-  Future<String> getMaxId() async {
+  Future<String> getMaxId(bool incrermentFlag) async {
     int ctr = 0;
+    LocationModel locModel = LocationModel();
     Database db = await this.database;
-    var result = await db.rawQuery('SELECT MAX($COLUMN_ACTIVIY_ID) FROM $TABLE_LOCATION');
+    var result = await db.rawQuery('SELECT MAX($COLUMN_ACTIVIY_ID) AS $COLUMN_ACTIVIY_ID FROM $TABLE_LOCATION');
     print('result ==> '+result.toString());
     int count = result.length;         // Count the number of map entries in db table
     print('count ==> '+count.toString());
     List<LocationModel> list = List<LocationModel>();
     // For loop to create a 'Note List' from a 'Map List'
     for (int i = 0; i < count; i++) {
-      list.add(LocationModel.fromMap(result[i]));
+      locModel=LocationModel.fromMap(result[i]);
+      if(locModel.activityId == null){
+        print('getMaxId() : activityId is null' +locModel.toString());
+      }else{
+        print('getMaxId() : activityId = '+locModel.activityId.toString());
+      }
+      list.add(locModel);
     }
     if(list[0].activityId == null){
       print('activityId = > null' + ' change to zero');
     }else {
       print('activityId = > ' + list[0].activityId.toString());
       ctr = int.parse(list[0].activityId.toString());
-      ctr++;
+      if(incrermentFlag){
+        ctr++;
+      } //else ctr will not increment
     }
     print('ctr==>> ' +ctr.toString());
     return ctr.toString();
@@ -125,17 +134,6 @@ class DatabaseHelper {
     final SharedPreferences prefs = await _prefs;
     return prefs.getString("deviceId");
   }
-  Future<int> insertLog() async {
-    print('insertLog(): ' );
-    LocationModel location;
-    Database db = await this.database;
-    getMaxId().then((value){
-      location.activityId = value ;
-    });
-    //location.deviceId = await _getDevice();
-    //location.timestamp = DateTime.now().toString();
-    var result = await db.insert(TABLE_LOCATION, location.toMap());
-    return result;
-  }
+
 
 }

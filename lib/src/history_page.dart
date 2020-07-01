@@ -53,7 +53,7 @@ class _HistoryPageState extends State<HistoryPage> {
           color: Colors.white,
           elevation: 2.0,
           child: ListTile(
-            title: Text(this.locationList[position].activityId, style: titleStyle,),
+            title: Text('Activity Log no. ' +this.locationList[position].activityId, style: titleStyle,),
             //subtitle: Text(this.locationList[position].deviceId),
             onTap: () {
               debugPrint("ListTile Tapped");

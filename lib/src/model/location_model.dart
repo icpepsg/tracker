@@ -39,11 +39,13 @@ class LocationModel {
   LocationModel.fromMap(Map<String, dynamic> map) {
     id = map[DatabaseHelper.COLUMN_ID];
     activityId = map[DatabaseHelper.COLUMN_ACTIVIY_ID];
-    deviceId = map[DatabaseHelper.COLUMN_DEVICEID];
-    latitude = map[DatabaseHelper.COLUMN_LATITUDE];
-    longitude = map[DatabaseHelper.COLUMN_LONGITUDE];
-    timestamp = map[DatabaseHelper.COLUMN_TIMESTAMP];
+    deviceId   = map[DatabaseHelper.COLUMN_DEVICEID];
+    latitude   = map[DatabaseHelper.COLUMN_LATITUDE];
+    longitude  = map[DatabaseHelper.COLUMN_LONGITUDE];
+    timestamp  = map[DatabaseHelper.COLUMN_TIMESTAMP];
   }
-
+  String toString(){
+    return '{ $this.id,$this.activityId,$this.deviceId,$this.latitude,$this.longitude,$this.timestamp }';
+  }
 
 }
