@@ -5,7 +5,6 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracker/src/LoginPage.dart';
 import 'package:tracker/src/history_page.dart';
-import 'file:///C:/Users/kid/AndroidStudioProjects3/tracker/lib/src/history.dart';
 import 'package:tracker/src/settings.dart';
 
 class Profile extends StatefulWidget {
