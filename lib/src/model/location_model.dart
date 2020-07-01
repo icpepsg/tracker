@@ -44,8 +44,6 @@ class LocationModel {
     longitude  = map[DatabaseHelper.COLUMN_LONGITUDE];
     timestamp  = map[DatabaseHelper.COLUMN_TIMESTAMP];
   }
-  String toString(){
-    return '{ $this.id,$this.activityId,$this.deviceId,$this.latitude,$this.longitude,$this.timestamp }';
-  }
+
 
 }

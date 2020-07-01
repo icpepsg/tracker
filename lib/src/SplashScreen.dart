@@ -29,7 +29,6 @@ class _SplashScreenState extends State<SplashScreen> {
   Position position ;
   double lat,lng;
   DeviceId deviceId = new DeviceId();
-
   @override
   void initState() {
     super.initState();
