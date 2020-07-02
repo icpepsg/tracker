@@ -11,8 +11,9 @@ import 'package:tracker/src/service/marker_service.dart';
 import 'package:geolocator/geolocator.dart';
 import 'Home.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:package_info/package_info.dart';
 import 'common/Constants.dart';
+
 class SplashScreen extends StatefulWidget {
   SplashScreen({Key key, this.title}) : super(key: key);
 
@@ -25,10 +26,11 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   int index;
-  MarkersModel markers =  new MarkersModel();
-  Position position ;
-  double lat,lng;
+  MarkersModel markers = new MarkersModel();
+  Position position;
+  double lat, lng;
   DeviceId deviceId = new DeviceId();
+  String appVersion;
   @override
   void initState() {
     super.initState();
@@ -37,9 +39,13 @@ class _SplashScreenState extends State<SplashScreen> {
     //deviceId.getDeviceId().then((value) {
     //  print('Device ID : ' +value.toString());
     //});
+    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+      String appName = packageInfo.appName;
+      String version = packageInfo.version;
+      appVersion = '$appName  v$version';
+    });
     Timer(Duration(seconds: 6), () {
-      printUser();
-      print('Date now : ' +DateTime.now().toString());
+        printUser();
     });
   }
 
@@ -49,43 +55,55 @@ class _SplashScreenState extends State<SplashScreen> {
       prefs.setString("deviceId", value);
     });
   }
+
   Future<String> _getUser() async {
     final SharedPreferences prefs = await _prefs;
     return prefs.getString('username');
   }
-  void printUser(){
+
+  void printUser() {
     _getUser().then((value) {
       print('username : $value');
-      if(value!=null){
-        Navigator.of(context).push(MaterialPageRoute (builder: (context) => Home()));
-      }else{
-        Navigator.of(context).push(MaterialPageRoute (builder: (context) => LoginPage()));
+      if (value != null) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => Home()));
+      } else {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => LoginPage()));
       }
     });
   }
+
   Future<Position> _getPosition() async {
-    position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     return position;
   }
+
   Future<double> _getLat() async {
-    position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     return position.latitude;
   }
+
   Future<double> _getLng() async {
-    position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     return position.longitude;
   }
+
   void initMarker() {
-    _getPosition().then((value){
-      print('latitude=>' +value.latitude.toString());
-      print('longitude=>' +value.longitude.toString());
+    _getPosition().then((value) {
+      print('latitude=>' + value.latitude.toString());
+      print('longitude=>' + value.longitude.toString());
     });
     getResp();
   }
-  void getResp(){
+
+  void getResp() {
     submitData().then((result) {
-      index=1;
-      String active,died,recovered,remarks;
+      index = 1;
+      String active, died, recovered, remarks;
       //print('result = > '+result.body);
       Map markerMap = jsonDecode(result.body);
       var data = MarkersModel.fromJson(markerMap);
@@ -94,22 +112,27 @@ class _SplashScreenState extends State<SplashScreen> {
       cityList.forEach((cityElement) {
         List<Info> infoList = cityElement.info;
         infoList.forEach((element) {
-          if (element.active!=null) { active = element.active.toString(); }
-          if (element.died!=null) { died=element.died.toString(); }
-          if (element.recovered!=null) { recovered = element.recovered.toString(); }
+          if (element.active != null) {
+            active = element.active.toString();
+          }
+          if (element.died != null) {
+            died = element.died.toString();
+          }
+          if (element.recovered != null) {
+            recovered = element.recovered.toString();
+          }
         });
         remarks = "Active: $active\nRecovered: $recovered\nDeaths:$died";
         MarkerService.markersList.add(MarkerModel(
-            index,cityElement.name.toString(),
+            index,
+            cityElement.name.toString(),
             remarks,
             cityElement.lat.toString(),
             cityElement.lng.toString(),
             ""));
         index++;
-      }
-      );
+      });
     });
-
   }
 
   Future<http.Response> submitData() async {
@@ -126,9 +149,37 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Container(
-            child: Center(child: CircularLoadingAnimation())));
+    return new WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: (appVersion!=null) ? Container(
+          child: Column(
+            children: <Widget>[
+              Flexible(
+                child: Container(),
+              ),
+              Center(
+                child: CircularLoadingAnimation(),
+              ),
+              Flexible(
+                child: Container(
+
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Text(appVersion,
+                          style: TextStyle(fontWeight: FontWeight.bold))
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
+              : Container(child: CircularProgressIndicator(),)
+
+      ),
+    );
   } // end build
 
 }

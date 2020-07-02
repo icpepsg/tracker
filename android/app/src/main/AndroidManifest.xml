@@ -13,6 +13,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="tracker"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCXo8le8MMhcenwh-_7ka1qWMVlbVuXcTM"/>
@@ -20,6 +21,8 @@
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
+            android:screenOrientation="portrait"
+            android:usesCleartextTraffic="true"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">

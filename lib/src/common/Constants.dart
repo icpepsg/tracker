@@ -30,6 +30,10 @@ class Constants {
       //URLS
       //static const API_URL_LOGIN = 'http://kelvinco.ml/webapp/login.php';
       //static const API_URL_SIGN_UP = 'http://kelvinco.ml/webapp/ct_signup.php';
+      static const API_URL_PRIVACY = 'http://kelvinco.ml/webapp/privacy.html';
+      static const API_URL_TERMS = 'http://kelvinco.ml/webapp/terms.html';
+      static const API_URL_ABOUT = 'https://icpepsingapore.com/about-us/';
+      static const API_URL_CONTACT = 'https://icpepsingapore.com/contact/';
       static const API_URL_LOGIN = 'http://ec2-54-255-76-190.ap-southeast-1.compute.amazonaws.com/api/users/login';
       static const API_URL_SIGN_UP = 'http://ec2-54-255-76-190.ap-southeast-1.compute.amazonaws.com/api/users/signup';
       static const API_URL_FACEBOOK_TOKEN = 'https://graph.facebook.com/v2.3/me?fields=email,id,first_name,last_name,middle_name,name,name_format,picture.width(500).height(500),short_name&access_token=';

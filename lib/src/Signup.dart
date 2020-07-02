@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tracker/src/common/Constants.dart';
 import 'customwidget/CustomFormWidget.dart';
 import 'loginPage.dart';
+
 /*
  Author : kelvin Co
  */
@@ -14,8 +15,6 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
-
-
   Widget _loginAccountLabel() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 20),
@@ -23,7 +22,8 @@ class _SignupState extends State<Signup> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(Constants.TXT_LABEL_GOT_ACCOUNT,
+          Text(
+            Constants.TXT_LABEL_GOT_ACCOUNT,
             style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
           ),
           SizedBox(
@@ -34,8 +34,10 @@ class _SignupState extends State<Signup> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => LoginPage()));
             },
-            child: Text(Constants.TXT_BUTTON_LOGIN,
-              style: TextStyle(color: Colors.red, fontSize: 13, fontWeight: FontWeight.w600),
+            child: Text(
+              Constants.TXT_BUTTON_LOGIN,
+              style: TextStyle(
+                  color: Colors.red, fontSize: 13, fontWeight: FontWeight.w600),
             ),
           )
         ],
@@ -65,46 +67,42 @@ class _SignupState extends State<Signup> {
     double topContent = MediaQuery.of(context).size.height * 0.2;
     double midContent = MediaQuery.of(context).size.height * 0.5;
     double botContent = MediaQuery.of(context).size.height * 0.2;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
- //           child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-
-                    height: topContent,
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(
-                          height: topPadding,
-                        ),
-                        _title(),
-                      ],
-                    )
-                  ),
-
-                  SizedBox(
-                    height: midContent,
-                    width: width,
-                    child: CustomFormWidget(),
-                  ),
-                  Container(
-                  height: botContent,
-                  child: _loginAccountLabel(),
-                  ),
-                  ],
+    return new WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+            child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          //           child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                  height: topContent,
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: topPadding,
+                      ),
+                      _title(),
+                    ],
+                  )),
+              SizedBox(
+                height: midContent,
+                width: width,
+                child: CustomFormWidget(),
               ),
-       //     ),
-          )
+              Container(
+                height: botContent,
+                child: _loginAccountLabel(),
+              ),
+            ],
+          ),
+          //     ),
+        )),
       ),
     );
   }
-
-
-
 }
