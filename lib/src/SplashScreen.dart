@@ -36,18 +36,17 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     initMarker();
     _setDeviceId();
+    _getAppVersion();
     //deviceId.getDeviceId().then((value) {
     //  print('Device ID : ' +value.toString());
     //});
-    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-      String appName = packageInfo.appName;
-      String version = packageInfo.version;
-      appVersion = '$appName  v$version';
-    });
-    Timer(Duration(seconds: 6), () {
-        printUser();
-    });
+
+      Timer(Duration(seconds: 6), () {
+        getUser();
+      });
+
   }
+
 
   Future<void> _setDeviceId() async {
     final SharedPreferences prefs = await _prefs;
@@ -60,18 +59,26 @@ class _SplashScreenState extends State<SplashScreen> {
     final SharedPreferences prefs = await _prefs;
     return prefs.getString('username');
   }
+  Future<String> _getAppVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      String appName = packageInfo.appName;
+      String version = packageInfo.version;
+      setState(() {
+        appVersion = '$appName  v$version';
+      });
+     return appVersion;
 
-  void printUser() {
-    _getUser().then((value) {
-      print('username : $value');
-      if (value != null) {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => Home()));
-      } else {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => LoginPage()));
-      }
-    });
+  }
+  void getUser()  {
+      _getUser().then((value) {
+        print('username : $value');
+        if (value != null) {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => Home()));
+        } else {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginPage()));
+        }
+      });
+
   }
 
   Future<Position> _getPosition() async {
@@ -150,35 +157,36 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        body: (appVersion!=null) ? Container(
-          child: Column(
-            children: <Widget>[
-              Flexible(
-                child: Container(),
-              ),
-              Center(
-                child: CircularLoadingAnimation(),
-              ),
-              Flexible(
-                child: Container(
-
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(appVersion,
-                          style: TextStyle(fontWeight: FontWeight.bold))
-                    ],
+        onWillPop: () async => false,
+        child: Scaffold(
+          body: Container(
+            child: Column(
+              children: <Widget>[
+                Flexible(
+                  child: Container(),
+                ),
+                Center(
+                  child: CircularLoadingAnimation(),
+                ),
+                Flexible(
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        (appVersion != null) ? Text(appVersion,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold),) : CircularProgressIndicator(),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         )
-              : Container(child: CircularProgressIndicator(),)
 
-      ),
+
+
     );
   } // end build
 
