@@ -11,7 +11,7 @@
   </array>
   </dict>
 </array>
-
+<key>io.flutter.embedded_views_preview</key> <string>YES</string>
 <key>FacebookAppID</key>
 <string>191445245445578</string>
 <key>FacebookDisplayName</key>
