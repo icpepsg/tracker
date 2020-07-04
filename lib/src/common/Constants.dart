@@ -13,7 +13,7 @@ class Constants {
       static const TXT_BUTTON_REGISTER = 'REGISTER NOW';
       static const TXT_LABEL_NO_ACCOUNT = 'Don\'t have an account ?';
       static const TXT_LABEL_REGISTER = 'Register';
-      static const TXT_LABEL_USERNAME = 'Username or E-Mail Address';
+      static const TXT_LABEL_USERNAME = 'E-Mail Address';
       static const TXT_LABEL_PASSWORD = 'Password';
       static const TXT_LABEL_FORGOT_PASSWORD = 'Forgot Password ?';
       static const TXT_LABEL_GOT_ACCOUNT = 'Already have an account ?';
@@ -28,15 +28,15 @@ class Constants {
       static const MSG_ERROR_USERNAME_FMT = 'Invalid Username format';
 
       //URLS
-      //static const API_URL_LOGIN = 'http://kelvinco.ml/webapp/login.php';
-      //static const API_URL_SIGN_UP = 'http://kelvinco.ml/webapp/ct_signup.php';
-      static const API_URL_PRIVACY = 'http://kelvinco.ml/webapp/privacy.html';
-      static const API_URL_TERMS = 'http://kelvinco.ml/webapp/terms.html';
+      //static const API_URL_LOGIN = 'http://newcodeninja.com/webapp/login.php';
+      //static const API_URL_SIGN_UP = 'http://newcodeninja.com/webapp/ct_signup.php';
+      static const API_URL_PRIVACY = 'http://newcodeninja.com/webapp/privacy.html';
+      static const API_URL_TERMS = 'http://newcodeninja.com/webapp/terms.html';
       static const API_URL_ABOUT = 'https://icpepsingapore.com/about-us/';
       static const API_URL_CONTACT = 'https://icpepsingapore.com/contact/';
       static const API_URL_LOGIN = 'http://ec2-54-255-76-190.ap-southeast-1.compute.amazonaws.com/api/users/login';
       static const API_URL_SIGN_UP = 'http://ec2-54-255-76-190.ap-southeast-1.compute.amazonaws.com/api/users/signup';
       static const API_URL_FACEBOOK_TOKEN = 'https://graph.facebook.com/v2.3/me?fields=email,id,first_name,last_name,middle_name,name,name_format,picture.width(500).height(500),short_name&access_token=';
-      static const API_URL_DEFAULT_PHOTO  = 'http://kelvinco.ml/default_photo.png';
-      static const API_URL_MARKERS = 'http://kelvinco.ml/webapp/markers.php';
+      static const API_URL_DEFAULT_PHOTO  = 'http://newcodeninja.com/default_photo.png';
+      static const API_URL_MARKERS = 'http://newcodeninja.com/webapp/markers.php';
 }

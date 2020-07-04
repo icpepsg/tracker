@@ -18,6 +18,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   // final _formKey = GlobalKey<FormState>();
+
+
   LoginService loginService;
   @override
   Widget build(BuildContext context) {
@@ -43,9 +45,8 @@ class _LoginPageState extends State<LoginPage> {
                   else if (state is LoginIsLoaded)
                     return Home();
                   else if (state is LoginError)
-                    return Login(
-                      loginService: loginService,
-                    );
+                    return Login(loginService: loginService,);
+
                 }))),
           ),
         ),
@@ -63,6 +64,8 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
     return new WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
@@ -71,8 +74,12 @@ class Login extends StatelessWidget {
             create: (context) {
               return LoginBloc(LoginService());
             },
-            child: LoginForm(),
+            child: LoginForm()
+
           ),
         ));
   }
+
+
+
 }

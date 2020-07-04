@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracker/src/Home.dart';
 import 'package:tracker/src/Signup.dart';
@@ -72,7 +73,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Widget _createAccountLabel() {
+  Widget _createAccountLabel(double fontSize) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 20),
       alignment: Alignment.bottomCenter,
@@ -81,7 +82,7 @@ class _LoginFormState extends State<LoginForm> {
         children: <Widget>[
           Text(
             Constants.TXT_LABEL_NO_ACCOUNT,
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w600),
           ),
           SizedBox(width: 10),
           InkWell(
@@ -91,22 +92,52 @@ class _LoginFormState extends State<LoginForm> {
             child: Text(
               Constants.TXT_LABEL_REGISTER,
               style: TextStyle(
-                  color: Colors.red, fontSize: 13, fontWeight: FontWeight.w600),
+                  color: Colors.red, fontSize: fontSize, fontWeight: FontWeight.w600),
             ),
           )
         ],
       ),
     );
   }
-
+  void showToast(Color bgColor,String msg) {
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: bgColor,
+        textColor: Colors.white,
+        timeInSecForIosWeb: 3);
+  }
   @override
   Widget build(BuildContext context) {
     final loginBloc = BlocProvider.of<LoginBloc>(context);
+    double logoHeight = MediaQuery.of(context).size.height * .2;
+    double logoWidth  = MediaQuery.of(context).size.width * .2;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height*0.1;
+    double font,labelSize;
+    if (screenHeight <= 500) {
+      height = 5;
+      font = 10;
+      logoHeight = MediaQuery.of(context).size.height * .1;
+    }
+    else if (screenHeight <= 600) {
+      height = 10;
+       font = 12;
+      labelSize = 10;
+      logoHeight = MediaQuery.of(context).size.height * .2;
+    }else {
+      height = 20;
+      font = 15;
+      labelSize = 13;
+      logoHeight = MediaQuery.of(context).size.height * .25;
+    }
 
     return BlocListener<LoginBloc, LoginState>(
 
         listener: (context, state) {
       if (state is LoginError) {
+        showToast(Colors.red,state.getMessage);
         Scaffold.of(context).showSnackBar(
           SnackBar(
             content: Text('${state.getMessage}'),
@@ -119,6 +150,7 @@ class _LoginFormState extends State<LoginForm> {
         Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       }
     }, child: BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+
       return Form(
           key: _formKey,
           child: Scaffold(
@@ -129,17 +161,17 @@ class _LoginFormState extends State<LoginForm> {
                         padding: EdgeInsets.symmetric(horizontal: 30),
                         child: Column(children: <Widget>[
                           SizedBox(
-                            height: 20,
+                            height: height,
                           ),
                           Container(
                             alignment: Alignment.center,
-                            height: 200.0,
+                            height: logoHeight,
                             child: ImageContainer(
                               assetLocation: Constants.IMG_TRACKER,
                             ),
                           ),
                           SizedBox(
-                            height: 10,
+                            height: height,
                           ),
                           Container(
                             child: CommonTextWidget(
@@ -172,25 +204,22 @@ class _LoginFormState extends State<LoginForm> {
                               },
                             ),
                           ),
-                          SizedBox(
-                            height: 20,
-                          ),
                           _submitButton(context),
                           Container(
                             padding: EdgeInsets.symmetric(vertical: 10),
                             alignment: Alignment.centerRight,
                             child: Text(Constants.TXT_LABEL_FORGOT_PASSWORD,
                                 style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: labelSize,
                                     fontWeight: FontWeight.w500,
                                     color: Colors.redAccent)),
                           ),
                           Container(
                             child: Column(
                               children: <Widget>[
-                                new Text(' '),
+                                //new Text(' '),
                                 SignInButton(
-                                  Buttons.GoogleDark,
+                                  Buttons.Google,
                                   onPressed: () {
 // call google sign in here
                                   },
@@ -210,7 +239,7 @@ class _LoginFormState extends State<LoginForm> {
                             ),
                           ),
                           Expanded(
-                            child: _createAccountLabel(),
+                            child: _createAccountLabel(labelSize),
                           ),
                         ]))),
               )));

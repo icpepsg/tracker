@@ -76,6 +76,14 @@ class _CustomFormWidget extends State<CustomFormWidget> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double spacer;
+    if (screenHeight <= 600) {
+      spacer = 5;
+
+    }else {
+      spacer = 10;
+    }
     return Form(
       key: _formKey,
       child: Column(children: <Widget>[
@@ -117,7 +125,7 @@ class _CustomFormWidget extends State<CustomFormWidget> {
             isPassword: true,
             evaluator: (String value) {
               if (value.length < 8) {
-                return Constants.MSG_ERROR_PASSWORD;
+                return Constants.MSG_ERROR_PASSWORD_FMT;
               } else if (userModel.password != null &&
                   userModel.password != value) {
                 return Constants.MSG_ERROR_MISMATCH;
@@ -126,6 +134,7 @@ class _CustomFormWidget extends State<CustomFormWidget> {
             },
           ),
         ),
+        SizedBox(height: spacer,),
         Container(
           child: _submitButton(),
         ),

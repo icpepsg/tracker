@@ -38,6 +38,20 @@ class _ProfileState extends State<Profile> {
   }
   @override
   Widget build(BuildContext context) {
+
+    double screenHeight = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height*0.1;
+    double font,iconSize;
+    if (screenHeight <= 600) {
+      height = 10;
+      font = 12;
+      iconSize = 20;
+    }else {
+      height = 20;
+      font = 20;
+      iconSize = 25;
+    }
+
     return FutureBuilder(
       future: _getUser(),
       builder: (context,snapshot){
@@ -48,7 +62,7 @@ class _ProfileState extends State<Profile> {
                 decoration: BoxDecoration(gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.white, Colors.green[100], Colors.green[100]])),
+                    colors: [Colors.green, Colors.green[100], Colors.green[100]])),
               ),
               Container(
                 child: Column(mainAxisAlignment: MainAxisAlignment.center,
@@ -117,8 +131,8 @@ class _ProfileState extends State<Profile> {
                                     minHeight: viewportConstraints.maxHeight,
                                   ),
                                   child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      //mainAxisSize: MainAxisSize.min,
+                                      //mainAxisAlignment: MainAxisAlignment.spaceAround,
                                       children: <Widget>[
                                       /*  ListTile(
                                           leading: Icon(Icons.center_focus_weak),
@@ -129,37 +143,43 @@ class _ProfileState extends State<Profile> {
                                         ), */
 
                                         ListTile(
-                                          leading: Icon(Icons.history),
-                                          title: Text('History'),
-                                          trailing: Icon(Icons.arrow_forward_ios),
+                                          dense:true,
+                                          leading: Icon(Icons.history,size: iconSize,),
+                                          title: Text('History', style: TextStyle(fontSize: font),),
+                                          trailing: Icon(Icons.arrow_forward_ios,size: font,),
                                           enabled: true,
                                           onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => HistoryPage()));},
                                         ),
                                         ListTile(
-                                          leading: Icon(Icons.security),
-                                          title: Text('Privacy Policy'),
-                                          trailing: Icon(Icons.arrow_forward_ios),
+                                          dense:true,
+                                          leading: Icon(Icons.security,size: iconSize),
+                                          title: Text('Privacy Policy', style: TextStyle(fontSize: font)),
+                                          trailing: Icon(Icons.arrow_forward_ios,size: font,),
                                           enabled: true,
                                           onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => DynamicWebview(Constants.API_URL_PRIVACY)));},
                                         ),
                                         ListTile(
-                                          leading: Icon(Icons.library_books),
-                                          title: Text('Terms and Condition'),
-                                          trailing: Icon(Icons.arrow_forward_ios),
+                                          dense:true,
+                                          leading: Icon(Icons.library_books,size: iconSize),
+                                          title: Text('Terms and Condition', style: TextStyle(fontSize: font)),
+                                          trailing: Icon(Icons.arrow_forward_ios,size: font,),
                                           enabled: true,
                                           onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => DynamicWebview(Constants.API_URL_TERMS)));},
                                         ),
+
                                         ListTile(
-                                          leading: Icon(Icons.info_outline),
-                                          title: Text('About'),
-                                          trailing: Icon(Icons.arrow_forward_ios),
+                                          dense:true,
+                                          leading: Icon(Icons.info_outline,size: iconSize),
+                                          title: Text('About', style: TextStyle(fontSize: font)),
+                                          trailing: Icon(Icons.arrow_forward_ios,size: font,),
                                           enabled: true,
                                           onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => DynamicWebview(Constants.API_URL_ABOUT)));},
                                         ),
                                         ListTile(
-                                            leading: Icon(Icons.mail_outline),
-                                            title: Text('Contact Us'),
-                                            trailing: Icon(Icons.arrow_forward_ios),
+                                          dense:true,
+                                            leading: Icon(Icons.mail_outline,size: iconSize),
+                                            title: Text('Contact Us', style: TextStyle(fontSize: font)),
+                                            trailing: Icon(Icons.arrow_forward_ios,size: font,),
                                             enabled: true,
                                             onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => DynamicWebview(Constants.API_URL_CONTACT)));},
                                         ),
@@ -172,15 +192,16 @@ class _ProfileState extends State<Profile> {
                                               Navigator.push(context,MaterialPageRoute(builder: (context) => SettingsPage()));
                                             }), */
                                         ListTile(
-                                          leading: Icon(Icons.exit_to_app),
-                                          title: Text('Log out'),
-                                          trailing: Icon(Icons.arrow_forward_ios),
+                                          dense:true,
+                                          leading: Icon(Icons.exit_to_app,size: iconSize),
+                                          title: Text('Log out', style: TextStyle(fontSize: font)),
+                                          trailing: Icon(Icons.arrow_forward_ios,size: font,),
                                           enabled: true,
                                           onTap: () async {
                                             SharedPreferences prefs =
                                             await SharedPreferences.getInstance();
                                             prefs.remove("username");
-                                            prefs.clear();
+                                            //prefs.clear();
                                             await facebookSignIn.logOut();
                                             Navigator.push(context,
                                                 MaterialPageRoute(builder: (context) => LoginPage()));

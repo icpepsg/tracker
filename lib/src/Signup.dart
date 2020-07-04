@@ -15,7 +15,7 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
-  Widget _loginAccountLabel() {
+  Widget _loginAccountLabel(double fontSize) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 20),
       alignment: Alignment.bottomCenter,
@@ -24,7 +24,7 @@ class _SignupState extends State<Signup> {
         children: <Widget>[
           Text(
             Constants.TXT_LABEL_GOT_ACCOUNT,
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w600),
           ),
           SizedBox(
             width: 10,
@@ -37,7 +37,7 @@ class _SignupState extends State<Signup> {
             child: Text(
               Constants.TXT_BUTTON_LOGIN,
               style: TextStyle(
-                  color: Colors.red, fontSize: 13, fontWeight: FontWeight.w600),
+                  color: Colors.red, fontSize: fontSize, fontWeight: FontWeight.w600),
             ),
           )
         ],
@@ -46,13 +46,21 @@ class _SignupState extends State<Signup> {
   }
 
   Widget _title() {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double font;
+    if (screenHeight <= 600) {
+      font = 20;
+    }else {
+      font = 30;
+    }
+
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
         text: Constants.TXT_APP_TITLE,
         style: GoogleFonts.courierPrime(
           textStyle: Theme.of(context).textTheme.display1,
-          fontSize: 30,
+          fontSize: font,
           fontWeight: FontWeight.w700,
           color: Colors.green[700],
         ),
@@ -66,7 +74,24 @@ class _SignupState extends State<Signup> {
     double topPadding = MediaQuery.of(context).size.height * 0.1;
     double topContent = MediaQuery.of(context).size.height * 0.2;
     double midContent = MediaQuery.of(context).size.height * 0.5;
-    double botContent = MediaQuery.of(context).size.height * 0.2;
+    double botContent = MediaQuery.of(context).size.height * 0.1;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height*0.1;
+    double font,labelSize;
+    if (screenHeight <= 500) {
+      height = 5;
+      font = 10;
+      labelSize = 8;
+    }
+    else if (screenHeight <= 600) {
+      height = 10;
+      font = 12;
+      labelSize = 10;
+    }else {
+      height = 20;
+      font = 15;
+      labelSize = 13;
+    }
     return new WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -96,7 +121,7 @@ class _SignupState extends State<Signup> {
               ),
               Container(
                 height: botContent,
-                child: _loginAccountLabel(),
+                child: _loginAccountLabel(labelSize),
               ),
             ],
           ),

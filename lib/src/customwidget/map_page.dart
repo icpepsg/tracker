@@ -255,7 +255,7 @@ class _MapPageState extends State<MapPage> {
                                 children: <Widget>[
                                   SizedBox(
                                     width: MediaQuery.of(context).size.width,  // or use fixed size like 200
-                                    height: MediaQuery.of(context).size.height*.8,
+                                    height: MediaQuery.of(context).size.height*.7,
                                     child: ValueListenableBuilder(
                                         valueListenable: valueNotifier, // that's the value we are listening to
                                         builder: (context, value, child) {
