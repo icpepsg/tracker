@@ -49,11 +49,14 @@ class _HistoryPageState extends State<HistoryPage> {
     return ListView.builder(
       itemCount: count,
       itemBuilder: (BuildContext context, int position) {
+        int index = int.parse(locationList[position].activityId);
+        index+=1;
+        print('index =>  $index');
         return Card(
           color: Colors.white,
           elevation: 2.0,
           child: ListTile(
-            title: Text('Activity Log no. ' +this.locationList[position].activityId, style: titleStyle,),
+            title: Text('Activity Log no. ' +index.toString(), style: titleStyle,),
             //subtitle: Text(this.locationList[position].deviceId),
             onTap: () {
               debugPrint("ListTile Tapped");

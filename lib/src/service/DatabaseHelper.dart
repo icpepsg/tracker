@@ -3,6 +3,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:tracker/src/model/location_model.dart';
+import 'package:path/path.dart' as p;
 class DatabaseHelper {
   static DatabaseHelper _databaseHelper;
   static Database _database;
@@ -31,7 +32,7 @@ class DatabaseHelper {
   }
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'location.db';
+    String path = p.join(directory.path , 'location.db') ;
     var locDb = await openDatabase(path,version: 1,onCreate: _createDB);
     return locDb;
   }

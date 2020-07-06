@@ -90,7 +90,7 @@ class _MapPageState extends State<MapPage> {
     latlng = LatLng(newLocalData.latitude, newLocalData.longitude);
 
     this.setState(() {
-      markers.add(
+      /* markers.add(
           Marker(
               markerId: MarkerId("home"),
               position: latlng,
@@ -100,7 +100,7 @@ class _MapPageState extends State<MapPage> {
               flat: true,
               anchor: Offset(0.5, 0.5),
               icon: BitmapDescriptor.fromBytes(imageData))
-            );
+            ); */
       //flat --> icon will be stick into the map
       circle = Circle(
           circleId: CircleId("direction"),

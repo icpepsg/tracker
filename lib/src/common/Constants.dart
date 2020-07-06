@@ -28,15 +28,15 @@ class Constants {
       static const MSG_ERROR_USERNAME_FMT = 'Invalid Username format';
 
       //URLS
-      //static const API_URL_LOGIN = 'http://newcodeninja.com/webapp/login.php';
-      //static const API_URL_SIGN_UP = 'http://newcodeninja.com/webapp/ct_signup.php';
-      static const API_URL_PRIVACY = 'http://newcodeninja.com/webapp/privacy.html';
-      static const API_URL_TERMS = 'http://newcodeninja.com/webapp/terms.html';
+      //static const API_URL_LOGIN = 'https://newcodeninja.com/webapp/login.php';
+      //static const API_URL_SIGN_UP = 'https://newcodeninja.com/webapp/ct_signup.php';
+      static const API_URL_PRIVACY = 'https://newcodeninja.com/webapp/privacy.html';
+      static const API_URL_TERMS = 'https://newcodeninja.com/webapp/terms.html';
       static const API_URL_ABOUT = 'https://icpepsingapore.com/about-us/';
       static const API_URL_CONTACT = 'https://icpepsingapore.com/contact/';
       static const API_URL_LOGIN = 'http://ec2-54-255-76-190.ap-southeast-1.compute.amazonaws.com/api/users/login';
       static const API_URL_SIGN_UP = 'http://ec2-54-255-76-190.ap-southeast-1.compute.amazonaws.com/api/users/signup';
       static const API_URL_FACEBOOK_TOKEN = 'https://graph.facebook.com/v2.3/me?fields=email,id,first_name,last_name,middle_name,name,name_format,picture.width(500).height(500),short_name&access_token=';
-      static const API_URL_DEFAULT_PHOTO  = 'http://newcodeninja.com/default_photo.png';
-      static const API_URL_MARKERS = 'http://newcodeninja.com/webapp/markers.php';
+      static const API_URL_DEFAULT_PHOTO  = 'https://newcodeninja.com/default_photo.png';
+      static const API_URL_MARKERS = 'https://newcodeninja.com/webapp/markers.php';
 }
