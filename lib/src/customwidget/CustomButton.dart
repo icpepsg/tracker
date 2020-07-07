@@ -26,13 +26,6 @@ class CustomButton extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(15)),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: Colors.green.withAlpha(100),
-                offset: Offset(2, 4),
-                blurRadius: 1,
-                spreadRadius: 1)
-          ],
           color: Colors.green[600]),
       child: Text(label,
         style: TextStyle(
