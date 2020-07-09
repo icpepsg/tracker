@@ -32,21 +32,9 @@ class _LoginPageState extends State<LoginPage> {
             child: BlocProvider(
                 create: (context) => LoginBloc(LoginService()),
                 child: Container(child:
-                    // ignore: missing_return
                     BlocBuilder<LoginBloc, LoginState>(
-                        // ignore: missing_return
                         builder: (context, state) {
-                  if (state is LoginInit) {
-                    return LoginForm();
-                  } else if (state is LoginIsLoading)
-                    return Scaffold(
-                        body: Container(
-                            child: Center(child: CircularLoadingAnimation())));
-                  else if (state is LoginIsLoaded)
-                    return Home();
-                  else if (state is LoginError)
-                    return Login(loginService: loginService,);
-
+                          return LoginForm();
                 }))),
           ),
         ),
@@ -57,29 +45,3 @@ class _LoginPageState extends State<LoginPage> {
 
 }
 
-class Login extends StatelessWidget {
-  final LoginService loginService;
-
-  Login({Key key, @required this.loginService}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-
-
-    return new WillPopScope(
-        onWillPop: () async => false,
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: BlocProvider(
-            create: (context) {
-              return LoginBloc(LoginService());
-            },
-            child: LoginForm()
-
-          ),
-        ));
-  }
-
-
-
-}

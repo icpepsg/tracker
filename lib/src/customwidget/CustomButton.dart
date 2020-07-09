@@ -20,7 +20,7 @@ class CustomButton extends StatelessWidget {
     }
 
     return Container(
-      width: MediaQuery.of(context).size.width ,
+      width: screenWidth,
       height: height,
       padding: EdgeInsets.all(inset),
       alignment: Alignment.center,

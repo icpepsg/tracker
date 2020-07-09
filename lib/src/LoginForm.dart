@@ -12,14 +12,17 @@ import 'package:tracker/src/customwidget/CommonTextWidget.dart';
 import 'package:tracker/src/customwidget/CustomButton.dart';
 import 'package:tracker/src/customwidget/ImageContainer.dart';
 import 'package:tracker/src/model/UserModel.dart';
+import 'package:tracker/src/service/login_service.dart';
 
 class LoginForm extends StatefulWidget {
-  LoginForm({Key key, this.title, this.errMssage}) : super(key: key);
-  final String errMssage;
-  final String title;
+  final LoginService loginService;
+  LoginForm({Key key, @required this.loginService}) : super(key: key);
+  //LoginForm({Key key, this.title, this.errMssage}) : super(key: key);
+  //final String errMssage;
+  //final String title;
 
   @override
-  _LoginFormState createState() => _LoginFormState();
+  _LoginFormState createState() => _LoginFormState(this.loginService);
 }
 
 class _LoginFormState extends State<LoginForm> {
@@ -27,6 +30,8 @@ class _LoginFormState extends State<LoginForm> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   Future<String> _username; //TODO  : Change this to token on phase 2
   UserModel userModel = new UserModel();
+  LoginService loginService;
+  _LoginFormState(this.loginService);
 
   @override
   void initState() {
@@ -137,6 +142,7 @@ class _LoginFormState extends State<LoginForm> {
 
         listener: (context, state) {
       if (state is LoginError) {
+        _setUser(null);
         showToast(Colors.red,state.getMessage);
         Scaffold.of(context).showSnackBar(
           SnackBar(
@@ -145,8 +151,6 @@ class _LoginFormState extends State<LoginForm> {
           ),
         );
       }else if (state is LoginIsLoaded){
-
-
         Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       }
     }, child: BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
