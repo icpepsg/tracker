@@ -33,7 +33,7 @@ class LoginService{
     facebookSignIn.loginBehavior = Platform.isIOS
         ? FacebookLoginBehavior.webViewOnly
         : FacebookLoginBehavior.nativeWithFallback;
-
+    FbModel fbModel = new FbModel();
     final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
     print('Token: ${result.accessToken.token}');
     print('User id: ${result.accessToken.userId}');
@@ -47,18 +47,18 @@ class LoginService{
         if (result.status == FacebookLoginStatus.loggedIn) {
           Map resp = jsonDecode(graphResp.body);
           var data = FbModel.fromJson(resp);
-          return data;
+          fbModel =data;
         }
         print('loggedIn');
-        return null;
+        return fbModel;
       case FacebookLoginStatus.cancelledByUser:
         print('cancelledByUser');
-        return null;
+        return fbModel;
       case FacebookLoginStatus.error:
         print('error : ' + result.errorMessage);
         await facebookSignIn.logOut();
         print('logOut : ');
-        return null;
+        return fbModel;
     }
   }
 
