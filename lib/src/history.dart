@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:tracker/src/model/location_model.dart';
 import 'package:tracker/src/service/DatabaseHelper.dart';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+//import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracker/src/common/Constants.dart';
 import 'package:tracker/src/customwidget/ImageContainer.dart';
-import 'package:tracker/src/service/theme_service.dart';
+//import 'package:tracker/src/service/theme_service.dart';
 
 /*
  Author : kelvin Co
@@ -45,7 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final themeBloc = BlocProvider.of<ThemeBloc>(context);
+    //final themeBloc = BlocProvider.of<ThemeBloc>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -103,7 +103,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     setState(() {
                       isDarkOn=value;
                       print(isDarkOn);
-                      themeBloc.add(ThemeEvent.toggle);
+                      //themeBloc.add(ThemeEvent.toggle);
                       //context.bloc<ThemeBloc>().add(ThemeEvent.toggle);
                       _setTheme(value);
                     });

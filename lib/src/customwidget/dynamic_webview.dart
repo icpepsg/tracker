@@ -16,7 +16,7 @@ class DynamicWebview extends StatefulWidget {
 
 class _DynamicWebviewState extends State<DynamicWebview> {
   Completer<WebViewController> _controller = Completer<WebViewController>();
-  final Set<String> _favorites = Set<String>();
+
   final String url;
   _DynamicWebviewState(this.url);
 

@@ -69,7 +69,7 @@ class _HistoryPageState extends State<HistoryPage> {
       },
     );
   }
-
+/*
   void _delete(BuildContext context, LocationModel location) async {
     int result = await databaseHelper.deleteRecord(location.id);
     if (result != 0) {
@@ -77,7 +77,7 @@ class _HistoryPageState extends State<HistoryPage> {
       updateListView();
     }
   }
-
+*/
   void _showSnackBar(BuildContext context, String message) {
 
     final snackBar = SnackBar(content: Text(message));

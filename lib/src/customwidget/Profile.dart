@@ -8,8 +8,7 @@ import 'package:tracker/src/LoginPage.dart';
 import 'package:tracker/src/common/Constants.dart';
 import 'package:tracker/src/customwidget/dynamic_webview.dart';
 import 'package:tracker/src/history_page.dart';
-import 'package:tracker/src/qr.dart';
-import 'package:tracker/src/settings.dart';
+
 
 class Profile extends StatefulWidget {
   Profile({Key key}) : super(key: key);

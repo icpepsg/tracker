@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracker/src/LoginForm.dart';
 import 'package:tracker/src/bloc/login_bloc.dart';
-import 'package:tracker/src/customwidget/CircularLoadingAnimation.dart';
+//import 'package:tracker/src/customwidget/CircularLoadingAnimation.dart';
 import 'package:tracker/src/service/login_service.dart';
-import 'Home.dart';
+//import 'Home.dart';
 
 /*
  Author : kelvin Co
@@ -18,7 +18,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   // final _formKey = GlobalKey<FormState>();
-
 
   LoginService loginService;
   @override

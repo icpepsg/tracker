@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:tracker/src/model/location_model.dart';
 import 'package:path/path.dart' as p;
@@ -8,7 +8,7 @@ class DatabaseHelper {
   static DatabaseHelper _databaseHelper;
   static Database _database;
   DatabaseHelper._createInstance();
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   static const String TABLE_LOCATION = "location";
   static const String COLUMN_ID = "id";
   static const String COLUMN_ACTIVIY_ID = "activityId";
@@ -131,10 +131,7 @@ class DatabaseHelper {
     print('ctr==>> ' +ctr.toString());
     return ctr.toString();
   }
-  Future<String> _getDevice() async {
-    final SharedPreferences prefs = await _prefs;
-    return prefs.getString("deviceId");
-  }
+
 
 
 }

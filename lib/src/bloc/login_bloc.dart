@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:tracker/src/common/Constants.dart';
+
 import 'package:tracker/src/model/FbModel.dart';
 import 'package:tracker/src/model/UserModel.dart';
 import 'package:tracker/src/service/login_service.dart';
-import 'package:http/http.dart' as http;
+
 class LoginEvent extends Equatable{
   @override
   List<Object> get props => [];

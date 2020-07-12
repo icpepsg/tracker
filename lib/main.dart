@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tracker/src/SplashScreen.dart';
 import 'package:tracker/src/service/bloc_delegate.dart';
@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp>{
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+   // final textTheme = Theme.of(context).textTheme;
     return BlocProvider(
           create: (_) => ThemeBloc(),
           child: BlocBuilder<ThemeBloc, ThemeData>(
