@@ -3,17 +3,13 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:tracker/src/common/Constants.dart';
 import 'package:tracker/src/model/location_model.dart';
 import 'package:tracker/src/service/DatabaseHelper.dart';
-
-import 'package:tracker/src/service/device_id.dart';
 import 'package:tracker/src/service/marker_service.dart';
 import 'package:screen/screen.dart';
 
@@ -209,13 +205,13 @@ class _MapPageState extends State<MapPage> {
       }
       _locationSubscription = _locationTracker.onLocationChanged().listen((newLocalData) {
         if (mapController != null) {
-          mapController.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
-              bearing: 0,
-              target: LatLng(newLocalData.latitude, newLocalData.longitude),
-              tilt: 0,
-              zoom: 17.00)));
-          updateMarkerAndCircle(newLocalData, imageData);
           if(isTrackingActive){
+            mapController.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
+                bearing: 0,
+                target: LatLng(newLocalData.latitude, newLocalData.longitude),
+                tilt: 0,
+                zoom: 17.00)));
+            updateMarkerAndCircle(newLocalData, imageData);
             insertLocation(latlng.latitude.toString(),latlng.longitude.toString());
             incrementFlag=false;
            // print('LATITUDE: ${latlng.latitude}  LONGITUDE:  ${latlng.longitude}' +' Timestamp : ' +DateTime.now().toString());
@@ -242,6 +238,21 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth  = MediaQuery.of(context).size.width;
+    double height,cardHeight,width,fontSizeT,fontSizeS = 12;
+    if (screenHeight <= 600) {
+      fontSizeT = 14;fontSizeS = 12;
+      width = screenWidth;
+      height = screenHeight*.7;
+      cardHeight = 100;
+    }else {
+      fontSizeT = 20; fontSizeS = 12;
+      cardHeight = 116;
+      height = screenHeight*.8;
+      width = screenWidth;
+    }
+
     return StreamBuilder<int>(
         initialData: 0,
         builder: (context, snapshot) {
@@ -255,13 +266,14 @@ class _MapPageState extends State<MapPage> {
                                 children: <Widget>[
                                   SizedBox(
                                     width: MediaQuery.of(context).size.width,  // or use fixed size like 200
-                                    height: MediaQuery.of(context).size.height*.7,
+                                    height: height,
                                     child: ValueListenableBuilder(
                                         valueListenable: valueNotifier, // that's the value we are listening to
                                         builder: (context, value, child) {
                                           return  (latlng.latitude!=null && latlng.latitude != 0.0) ? GoogleMap(
                                             mapType: MapType.normal,
                                             initialCameraPosition: newCameraPosition,
+
                                             myLocationEnabled: true,
                                             zoomGesturesEnabled: true,
                                             markers: markers,
@@ -271,11 +283,20 @@ class _MapPageState extends State<MapPage> {
                                               mapController = controller;
                                               print('latlng.latitude ' +latlng.latitude.toString());
                                               print('latlng.longitude ' +latlng.longitude.toString());
+/*
                                               mapController.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
                                                   bearing: 0,
                                                   target: LatLng(latlng.latitude, latlng.longitude),
                                                   tilt: 0,
-                                                  zoom: 17.00))).then((val) {setState(() {});});
+                                                  zoom: 17.00))).then((val) {
+                                                   // setState(() {});
+                                                  });
+                                                  */
+                                              mapController.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
+                                                  bearing: 0,
+                                                  target: LatLng(latlng.latitude, latlng.longitude),
+                                                  tilt: 0,
+                                                  zoom: 17.00)));
 
                                             },
                                           )
@@ -339,7 +360,7 @@ class _MapPageState extends State<MapPage> {
                                 ],
                               ),
                             ),
-                            Positioned(
+                         /*   Positioned(
                               top: MediaQuery.of(context).size.height*.05,
                               width: MediaQuery.of(context).size.width,
                               child: Row(
@@ -354,14 +375,15 @@ class _MapPageState extends State<MapPage> {
                                   )
                                 ],
                               ),
-                            ),
+                            ), */ // this is the run and walk
                             Positioned(
                                 bottom: MediaQuery.of(context).size.height*.01,
-                                width: MediaQuery.of(context).size.width,
+                                width: width,
+                                height: 160,
                                 child: Padding(
                                     padding: const EdgeInsets.only(bottom: 78.0),
                                     child: SizedBox(
-                                      height: 116, // card height
+                                      height: cardHeight, // card height
                                       child: PageView.builder(
                                           itemCount: MarkerService.markersList.length, // how many items do we have
                                           controller: PageController(viewportFraction: 0.7),
@@ -393,7 +415,7 @@ class _MapPageState extends State<MapPage> {
                                                 scale: i == _index ? 1 : 0.7,
                                                 child: new Container(
                                                     height: 100.00,
-                                                    width: 250.00,
+                                                    width: 100.00,
                                                     decoration: BoxDecoration(
                                                       color: Color(0xffffffff),
                                                       boxShadow: [
@@ -408,8 +430,7 @@ class _MapPageState extends State<MapPage> {
                                                     ),
                                                     child: Row(
                                                         children: <Widget>[
-                                                          Padding(
-                                                            padding: const EdgeInsets.only(left: 9, top: 7, bottom: 7, right: 9),
+                                                          Padding(padding: const EdgeInsets.only(left: 9, top: 7, bottom: 7, right: 9),),
 //put the image here
                                                             /*
                                               child: Container(
@@ -425,10 +446,9 @@ class _MapPageState extends State<MapPage> {
                                               ),
 //
                                             */
-                                                          ),
+
                                                           Padding(
-                                                            padding: const EdgeInsets.only(
-                                                                top: 12, right: 0.0),
+                                                            padding: const EdgeInsets.only(top: 12, right: 0.0),
                                                             child: Column(
                                                               crossAxisAlignment:
                                                               CrossAxisAlignment.start,
@@ -442,19 +462,19 @@ class _MapPageState extends State<MapPage> {
                                                                     Text(MarkerService.markersList[i].name,
                                                                       style: TextStyle(
                                                                         fontFamily: "Montserrat",
-                                                                        fontSize: 20,
+                                                                        fontSize: fontSizeT,
                                                                         color: Color(0xff000000),
                                                                       ),
                                                                     ),
                                                                     Container(
-                                                                      width: 230,
+                                                                      width: width *.5,
                                                                       child: Text(
                                                                         MarkerService.markersList[i].description,
                                                                         overflow: TextOverflow.ellipsis,
                                                                         maxLines: 3,
                                                                         style: TextStyle(
                                                                           fontFamily: "Montserrat",
-                                                                          fontSize: 15,
+                                                                          fontSize: fontSizeS,
                                                                           color: Color(0xff000000),
                                                                         ),
                                                                       ),

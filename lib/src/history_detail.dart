@@ -75,7 +75,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
           elevation: 4.0,
           child: ListTile(
             title: Text('Activity Log no. ' + index.toString(), style: titleStyle,),
-            subtitle: Text('Lat: ' +this.locationList[position].latitude + ' Lng: ' +this.locationList[position].longitude +'\n ' +this.locationList[position].timestamp),
+            subtitle: Text('Lat: ' +this.locationList[position].latitude + '\n Lng: ' +this.locationList[position].longitude +'\n ' +this.locationList[position].timestamp),
           ),
         );
       },
@@ -111,7 +111,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
         visible: true,
         //latlng is List<LatLng>
         points: latlngSegment1,
-        width: 4,
+        width: 6,
         color: Colors.green,
       ));
     });

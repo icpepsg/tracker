@@ -22,7 +22,7 @@ class CommonTextWidget extends StatelessWidget {
 
     double font,inset,errorSize,height;
     if (screenHeight <= 600) {
-      errorSize = 8;
+      errorSize = 7;
       font = 12;
       inset = 10;
       height = MediaQuery.of(context).size.height*0.11;

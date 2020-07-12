@@ -128,6 +128,7 @@ class _SplashScreenState extends State<SplashScreen> {
           if (element.recovered != null) {
             recovered = element.recovered.toString();
           }
+
         });
         remarks = "Active: $active\nRecovered: $recovered\nDeaths:$died";
         MarkerService.markersList.add(MarkerModel(

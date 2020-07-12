@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,9 +14,10 @@ import 'package:tracker/src/common/Constants.dart';
 import 'package:tracker/src/customwidget/CommonTextWidget.dart';
 import 'package:tracker/src/customwidget/CustomButton.dart';
 import 'package:tracker/src/customwidget/ImageContainer.dart';
+import 'package:tracker/src/model/FbModel.dart';
 import 'package:tracker/src/model/UserModel.dart';
 import 'package:tracker/src/service/login_service.dart';
-
+import 'package:http/http.dart' as http;
 class LoginForm extends StatefulWidget {
   final LoginService loginService;
   LoginForm({Key key, @required this.loginService}) : super(key: key);
@@ -31,7 +35,10 @@ class _LoginFormState extends State<LoginForm> {
   Future<String> _username; //TODO  : Change this to token on phase 2
   UserModel userModel = new UserModel();
   LoginService loginService;
+  bool fbLoading = false;
   _LoginFormState(this.loginService);
+
+  static final FacebookLogin facebookSignIn = new FacebookLogin();
 
   @override
   void initState() {
@@ -47,6 +54,16 @@ class _LoginFormState extends State<LoginForm> {
   Future<void> _setUser(String user) async {
     final SharedPreferences prefs = await _prefs;
     prefs.setString("username", user);
+  }
+
+  Future<void> _setToken(String token) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setString("fbtoken", token);
+  }
+
+  Future<void> _setPicture(String url) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setString("profilePhoto", url);
   }
 
   Future<String> _getUser() async {
@@ -92,19 +109,23 @@ class _LoginFormState extends State<LoginForm> {
           SizedBox(width: 10),
           InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Signup()));
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Signup()));
             },
             child: Text(
               Constants.TXT_LABEL_REGISTER,
               style: TextStyle(
-                  color: Colors.red, fontSize: fontSize, fontWeight: FontWeight.w600),
+                  color: Colors.red,
+                  fontSize: fontSize,
+                  fontWeight: FontWeight.w600),
             ),
           )
         ],
       ),
     );
   }
-  void showToast(Color bgColor,String msg) {
+
+  void showToast(Color bgColor, String msg) {
     Fluttertoast.showToast(
         msg: msg,
         toastLength: Toast.LENGTH_SHORT,
@@ -113,47 +134,73 @@ class _LoginFormState extends State<LoginForm> {
         textColor: Colors.white,
         timeInSecForIosWeb: 3);
   }
+
   @override
   Widget build(BuildContext context) {
     final loginBloc = BlocProvider.of<LoginBloc>(context);
-    double logoHeight = MediaQuery.of(context).size.height * .2;
-    double logoWidth  = MediaQuery.of(context).size.width * .2;
-    double screenHeight = MediaQuery.of(context).size.height;
-    double height = MediaQuery.of(context).size.height*0.1;
-    double font,labelSize;
+    double logoHeight = MediaQuery
+        .of(context)
+        .size
+        .height * .2;
+    double logoWidth = MediaQuery
+        .of(context)
+        .size
+        .width * .2;
+    double screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double height = MediaQuery
+        .of(context)
+        .size
+        .height * 0.1;
+    double font, labelSize;
     if (screenHeight <= 500) {
       height = 5;
       font = 10;
-      logoHeight = MediaQuery.of(context).size.height * .1;
+      logoHeight = MediaQuery
+          .of(context)
+          .size
+          .height * .1;
     }
     else if (screenHeight <= 600) {
       height = 10;
-       font = 12;
+      font = 12;
       labelSize = 10;
-      logoHeight = MediaQuery.of(context).size.height * .2;
-    }else {
+      logoHeight = MediaQuery
+          .of(context)
+          .size
+          .height * .2;
+    } else {
       height = 20;
       font = 15;
       labelSize = 13;
-      logoHeight = MediaQuery.of(context).size.height * .25;
+      logoHeight = MediaQuery
+          .of(context)
+          .size
+          .height * .25;
     }
-
     return BlocListener<LoginBloc, LoginState>(
-
         listener: (context, state) {
-      if (state is LoginError) {
-        _setUser(null);
-        showToast(Colors.red,state.getMessage);
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${state.getMessage}'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }else if (state is LoginIsLoaded){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-      }
-    }, child: BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+          print('im at state listener... ' +state.toString());
+          if (state is LoginError) {
+            _setUser(null);
+            showToast(Colors.red, state.getMessage);
+            Scaffold.of(context).showSnackBar(
+              SnackBar(
+                content: Text('${state.getMessage}'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          } else if (state is LoginIsLoaded) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+          }else if (state is LoggedInFB) {
+            _setUser(state.getCredential);
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+          }
+        },
+        // ignore: missing_return
+        child: BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
 
       return Form(
           key: _formKey,
@@ -186,7 +233,7 @@ class _LoginFormState extends State<LoginForm> {
                               evaluator: (String value) {
                                 if (value.isEmpty) {
                                   return Constants.MSG_ERROR_USERNAME;
-                                }else if(!EmailValidator.validate(value)){
+                                } else if (!EmailValidator.validate(value)) {
                                   return Constants.MSG_ERROR_USERNAME_FMT;
                                 }
                                 return null;
@@ -224,6 +271,7 @@ class _LoginFormState extends State<LoginForm> {
                                 //new Text(' '),
                                 SignInButton(
                                   Buttons.Google,
+
                                   onPressed: () {
 // call google sign in here
                                   },
@@ -237,8 +285,12 @@ class _LoginFormState extends State<LoginForm> {
                                 SignInButton(Buttons.Facebook,
                                     onPressed: () async {
 //  To Add in this one
-                                  print('try logging in to facebook');
-                                })
+                                      //_loginFB();
+                                      //Navigator.push(context, MaterialPageRoute(builder: (context) => FBLogin()));
+                                      loginBloc.add(FBLogin());
+                                      print('try logging in to facebook');
+                                    }
+                                )
                               ],
                             ),
                           ),
@@ -248,5 +300,38 @@ class _LoginFormState extends State<LoginForm> {
                         ]))),
               )));
     }));
+  }
+
+  Future<Null> _loginFB() async {
+    // please do not remove this code i need  it as backup or reference - Kelvin
+    final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final token = result.accessToken.token;
+        final graphResp = await http.get(Constants.API_URL_FACEBOOK_TOKEN + token);
+        if (result.status == FacebookLoginStatus.loggedIn) {
+          Map fbMap = jsonDecode(graphResp.body);
+          var data = FbModel.fromJson(fbMap);
+          Map photo = data.picture.toJson();
+          var photoUrl = Picture.fromJson(photo);
+          _setToken(token);
+          _setUser(data.email);
+          _setPicture(photoUrl.data.url);
+          print("photo => " + photo.toString());
+          print("Email => " + data.email);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+        }
+        print('loggedIn');
+        // TODO: Handle this case.
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        print('cancelledByUser');
+        break;
+      case FacebookLoginStatus.error:
+        print('error : ' + result.errorMessage);
+        await facebookSignIn.logOut();
+        print('logOut : ');
+        break;
+    }
   }
 }

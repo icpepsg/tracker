@@ -12,7 +12,7 @@ class Constants {
       static const TXT_BUTTON_LOGOUT = 'LOGOUT';
       static const TXT_BUTTON_REGISTER = 'REGISTER NOW';
       static const TXT_LABEL_NO_ACCOUNT = 'Don\'t have an account ?';
-      static const TXT_LABEL_REGISTER = 'Register';
+      static const TXT_LABEL_REGISTER = 'SIGN UP';
       static const TXT_LABEL_USERNAME = 'E-Mail Address';
       static const TXT_LABEL_PASSWORD = 'Password';
       static const TXT_LABEL_FORGOT_PASSWORD = 'Forgot Password ?';

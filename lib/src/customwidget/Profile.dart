@@ -43,11 +43,11 @@ class _ProfileState extends State<Profile> {
     double height = MediaQuery.of(context).size.height*0.1;
     double font,iconSize;
     if (screenHeight <= 600) {
-      height = 10;
+      height = screenHeight*.5;
       font = 12;
       iconSize = 20;
     }else {
-      height = 20;
+      height = screenHeight*.57;
       font = 20;
       iconSize = 25;
     }
@@ -113,7 +113,7 @@ class _ProfileState extends State<Profile> {
                   ),
                   Center(
                     child: Container(
-                      height: MediaQuery.of(context).size.height * .5,
+                      height: height,
                       width: MediaQuery.of(context).size.width * .95,
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -202,9 +202,14 @@ class _ProfileState extends State<Profile> {
                                             await SharedPreferences.getInstance();
                                             prefs.remove("username");
                                             //prefs.clear();
-                                            await facebookSignIn.logOut();
-                                            Navigator.push(context,
-                                                MaterialPageRoute(builder: (context) => LoginPage()));
+                                            //await facebookSignIn.logOut();
+                                            facebookSignIn.logOut().then((value) {
+                                              Navigator.push(context,MaterialPageRoute(builder: (context) => LoginPage()));
+                                              setState(){
+                                                prefs.remove("username");
+                                              }
+                                            });
+
                                           },
                                         ),
                                       ]
