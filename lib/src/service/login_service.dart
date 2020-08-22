@@ -32,7 +32,8 @@ class LoginService{
    // facebookSignIn.loginBehavior = FacebookLoginBehavior.webViewOnly;
     facebookSignIn.loginBehavior = Platform.isIOS
         ? FacebookLoginBehavior.webViewOnly
-        : FacebookLoginBehavior.nativeWithFallback;
+        : FacebookLoginBehavior.webOnly;
+    //FacebookLoginBehavior.nativeWithFallback
     FbModel fbModel = new FbModel();
     final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
     print('Token: ${result.accessToken.token}');

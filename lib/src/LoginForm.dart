@@ -37,12 +37,13 @@ class _LoginFormState extends State<LoginForm> {
   LoginService loginService;
   bool fbLoading = false;
   _LoginFormState(this.loginService);
-
+  LoginBloc loginBloc;
   static final FacebookLogin facebookSignIn = new FacebookLogin();
 
   @override
   void initState() {
     super.initState();
+    loginBloc = BlocProvider.of<LoginBloc>(context);
     _username = _prefs.then((SharedPreferences prefs) {
       return (prefs.getString('username') ?? null);
     });
@@ -79,7 +80,7 @@ class _LoginFormState extends State<LoginForm> {
 
   Widget _submitButton(BuildContext context) {
     // ignore: close_sinks
-    final loginBloc = BlocProvider.of<LoginBloc>(context);
+    //final loginBloc = BlocProvider.of<LoginBloc>(context);
     return InkWell(
       onTap: () async {
         if (_formKey.currentState.validate()) {
@@ -137,7 +138,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final loginBloc = BlocProvider.of<LoginBloc>(context);
+    //final loginBloc = BlocProvider.of<LoginBloc>(context);
     double logoHeight = MediaQuery
         .of(context)
         .size

@@ -28,7 +28,7 @@ class _HistoryState extends State<History> {
 
     TextStyle textStyle = Theme.of(context).textTheme.title;
 
-    titleController.text = locationModel.activityId;
+    titleController.text = locationModel.activityId.toString();
     descriptionController.text = locationModel.deviceId;
 
     return WillPopScope(
@@ -152,7 +152,7 @@ class _HistoryState extends State<History> {
 
   // Update the title of Note object
   void updateTitle(){
-    locationModel.activityId = titleController.text;
+    locationModel.activityId = int.parse(titleController.text);
   }
 
   // Update the description of Note object
@@ -164,7 +164,7 @@ class _HistoryState extends State<History> {
   void _save() async {
     moveToLastScreen();
     locationModel.timestamp = DateTime.now().toString();
-    print('locationModel = > ' +locationModel.activityId);
+    print('locationModel = > ' +locationModel.activityId.toString());
     print('locationModel = > ' +locationModel.deviceId);
     int result;
     if (locationModel.id != null) {  // Case 1: Update operation

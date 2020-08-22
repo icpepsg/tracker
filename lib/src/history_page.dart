@@ -49,7 +49,7 @@ class _HistoryPageState extends State<HistoryPage> {
     return ListView.builder(
       itemCount: count,
       itemBuilder: (BuildContext context, int position) {
-        int index = int.parse(locationList[position].activityId);
+        int index = locationList[position].activityId;
         index+=1;
         print('index =>  $index');
         return Card(

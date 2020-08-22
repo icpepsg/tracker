@@ -68,7 +68,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
       //scrollDirection: Axis.horizontal,
       itemCount: count,
       itemBuilder: (BuildContext context, int position) {
-        int index = int.parse(locationList[position].activityId);
+        int index = locationList[position].activityId;
         index+=1; print('index =>  $index');
         return Card(
           color: Colors.white,

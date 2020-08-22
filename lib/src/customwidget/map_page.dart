@@ -126,7 +126,7 @@ class _MapPageState extends State<MapPage> {
 
   void getMarkers() async {
     final Uint8List userMarkerIcon =
-    await getBytesFromAsset('assets/images/normal_marker.png', 75);
+    await getBytesFromAsset('assets/images/normal_marker.png', 55);
 
     final Uint8List selectedMarkerIcon =
     await getBytesFromAsset('assets/images/selected_marker.png', 100);
@@ -167,7 +167,7 @@ class _MapPageState extends State<MapPage> {
 
   void insertLocation(String a,String b) async{
     getMax().then((valueA){
-      locationModel.activityId = valueA ;
+      locationModel.activityId = int.parse(valueA);
       print('locationModel.activityId = > ' +valueA.toString());
       getDid().then((valueB){
         locationModel.deviceId = valueB ;
@@ -245,11 +245,11 @@ class _MapPageState extends State<MapPage> {
       fontSizeT = 14;fontSizeS = 12;
       width = screenWidth;
       height = screenHeight*.7;
-      cardHeight = 100;
+      cardHeight = 170;
     }else {
       fontSizeT = 20; fontSizeS = 12;
-      cardHeight = 116;
-      height = screenHeight*.8;
+      cardHeight = 180;
+      height = screenHeight*.80;
       width = screenWidth;
     }
 
@@ -379,11 +379,12 @@ class _MapPageState extends State<MapPage> {
                             Positioned(
                                 bottom: MediaQuery.of(context).size.height*.01,
                                 width: width,
-                                height: 160,
+                                height: 190,
+                                //height: cardHeight,
                                 child: Padding(
                                     padding: const EdgeInsets.only(bottom: 78.0),
                                     child: SizedBox(
-                                      height: cardHeight, // card height
+                                      //height: cardHeight, // card height
                                       child: PageView.builder(
                                           itemCount: MarkerService.markersList.length, // how many items do we have
                                           controller: PageController(viewportFraction: 0.7),
@@ -414,7 +415,7 @@ class _MapPageState extends State<MapPage> {
                                             return Transform.scale(
                                                 scale: i == _index ? 1 : 0.7,
                                                 child: new Container(
-                                                    height: 100.00,
+                                                    height: 120.00,
                                                     width: 100.00,
                                                     decoration: BoxDecoration(
                                                       color: Color(0xffffffff),
@@ -430,7 +431,7 @@ class _MapPageState extends State<MapPage> {
                                                     ),
                                                     child: Row(
                                                         children: <Widget>[
-                                                          Padding(padding: const EdgeInsets.only(left: 9, top: 7, bottom: 7, right: 9),),
+                                                          Padding(padding: const EdgeInsets.only(left: 9, top: 7, bottom: 10, right: 9),),
 //put the image here
                                                             /*
                                               child: Container(
@@ -471,7 +472,7 @@ class _MapPageState extends State<MapPage> {
                                                                       child: Text(
                                                                         MarkerService.markersList[i].description,
                                                                         overflow: TextOverflow.ellipsis,
-                                                                        maxLines: 3,
+                                                                        maxLines: 6,
                                                                         style: TextStyle(
                                                                           fontFamily: "Montserrat",
                                                                           fontSize: fontSizeS,

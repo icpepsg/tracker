@@ -29,12 +29,15 @@ class _LoginPageState extends State<LoginPage> {
           resizeToAvoidBottomInset: false,
           body: Container(
             child: BlocProvider(
-                create: (context) => LoginBloc(LoginService()),
-                child: Container(child:
-                    BlocBuilder<LoginBloc, LoginState>(
-                        builder: (context, state) {
-                          return LoginForm();
-                }))),
+              create: (context) => LoginBloc(LoginService()),
+              child: Container(
+                child: BlocBuilder<LoginBloc, LoginState>(
+                  builder: (context, state) {
+                    return LoginForm();
+                  },
+                ),
+              ),
+            ),
           ),
         ),
         debugShowCheckedModeBanner: false,
@@ -43,4 +46,3 @@ class _LoginPageState extends State<LoginPage> {
   } // end build
 
 }
-

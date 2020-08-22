@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -59,7 +60,7 @@ class _ProfileState extends State<Profile> {
                 decoration: BoxDecoration(gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.green, Colors.green[100], Colors.green[100]])),
+                    colors: [Colors.white, Colors.green[100], Colors.white])),
               ),
               Container(
                 child: Column(mainAxisAlignment: MainAxisAlignment.center,
@@ -94,12 +95,16 @@ class _ProfileState extends State<Profile> {
                             SizedBox(
                               width: 10,
                             ),
-                            Container(
+                            SizedBox(
                               height: MediaQuery.of(context).size.height * .15,
+                              width: MediaQuery.of(context).size.width * .5,
                               child: Column(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[Text(username)]
+                                  children: <Widget>[AutoSizeText(
+                                    this.username,
+                                    maxLines: 3,
+                                  )]
                               ),
                             )
                           ],)

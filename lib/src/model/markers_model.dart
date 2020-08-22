@@ -15,12 +15,14 @@ class MarkersModel {
     this.city,
     this.success,
     this.message,
+    this.dteUpload,
   });
   double longitude;
   double latitude;
   List<City> city;
   bool success;
   String message;
+  String dteUpload;
 
   factory MarkersModel.fromJson(Map<String, dynamic> json) => MarkersModel(
     longitude: json["longitude"],
@@ -28,6 +30,7 @@ class MarkersModel {
     city: List<City>.from(json["city"].map((x) => City.fromJson(x))),
     success: json["success"],
     message: json["message"],
+    dteUpload: json["dteUpload"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -36,6 +39,7 @@ class MarkersModel {
     "city": List<dynamic>.from(city.map((x) => x.toJson())),
     "success": success,
     "message": message,
+    "dteUpload": dteUpload,
   };
 }
 

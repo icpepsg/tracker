@@ -16,6 +16,7 @@ class DatabaseHelper {
   static const String COLUMN_LATITUDE = "latitude";
   static const String COLUMN_LONGITUDE = "longitude";
   static const String COLUMN_TIMESTAMP = "timestamp";
+  static const String COLUMN_UPLOADED = "uploaded";
 
 
   factory DatabaseHelper(){
@@ -31,14 +32,25 @@ class DatabaseHelper {
     return _database;
   }
   Future<Database> initializeDatabase() async {
+    print('initializeDatabase() : ');
     Directory directory = await getApplicationDocumentsDirectory();
     String path = p.join(directory.path , 'location.db') ;
-    var locDb = await openDatabase(path,version: 1,onCreate: _createDB);
+    var locDb = await openDatabase(path,version: 2,onCreate: _createDB,onUpgrade: _onUpgrade);
     return locDb;
   }
   void _createDB(Database db, int version) async {
-    await db.execute('CREATE TABLE $TABLE_LOCATION($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_ACTIVIY_ID TEXT , $COLUMN_DEVICEID TEXT '
+    print('_createDB() : ' +version.toString());
+    await db.execute('CREATE TABLE $TABLE_LOCATION($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_ACTIVIY_ID INTEGER , $COLUMN_DEVICEID TEXT '
                     ',$COLUMN_LATITUDE TEXT,$COLUMN_LONGITUDE TEXT, $COLUMN_TIMESTAMP TEXT )');
+  }
+  void _onUpgrade(Database db, int oldVersion, int newVersion) async{
+    print('_onUpgrade() : ' + oldVersion.toString() +' : ' +newVersion.toString() );
+    await db.execute('alter table $TABLE_LOCATION rename to tmp');
+    await db.execute('CREATE TABLE $TABLE_LOCATION($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_ACTIVIY_ID INTEGER , $COLUMN_DEVICEID TEXT '
+        ',$COLUMN_LATITUDE TEXT,$COLUMN_LONGITUDE TEXT, $COLUMN_TIMESTAMP TEXT , $COLUMN_UPLOADED TEXT )');
+    await db.execute('insert into $TABLE_LOCATION select * from tmp ');
+    await db.execute('DROP TABLE tmp ');
+    print('_onUpgrade() : end ');
   }
   
   Future<List<Map<String,dynamic>>>getLocationList() async {
@@ -105,7 +117,7 @@ class DatabaseHelper {
     LocationModel locModel = LocationModel();
     Database db = await this.database;
     var result = await db.rawQuery('SELECT MAX($COLUMN_ACTIVIY_ID) AS $COLUMN_ACTIVIY_ID FROM $TABLE_LOCATION');
-    print('result ==> '+result.toString());
+    print('MAX(sCOLUMN_ACTIVIY_ID) ==> '+result.toString());
     int count = result.length;         // Count the number of map entries in db table
     print('count ==> '+count.toString());
     List<LocationModel> list = List<LocationModel>();

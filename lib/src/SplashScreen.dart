@@ -115,6 +115,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Map markerMap = jsonDecode(result.body);
       var data = MarkersModel.fromJson(markerMap);
       print('success : ' + data.success.toString());
+      String dateUpload = data.dteUpload.toString();
       List<City> cityList = data.city;
       cityList.forEach((cityElement) {
         List<Info> infoList = cityElement.info;
@@ -130,7 +131,8 @@ class _SplashScreenState extends State<SplashScreen> {
           }
 
         });
-        remarks = "Active: $active\nRecovered: $recovered\nDeaths:$died";
+        remarks = "DOH public data as at $dateUpload\nActive: $active\nRecovered: $recovered\nDeaths: $died " ;
+        print (remarks);
         MarkerService.markersList.add(MarkerModel(
             index,
             cityElement.name.toString(),
