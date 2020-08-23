@@ -48,7 +48,7 @@ class DatabaseHelper {
     await db.execute('alter table $TABLE_LOCATION rename to tmp');
     await db.execute('CREATE TABLE $TABLE_LOCATION($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_ACTIVIY_ID INTEGER , $COLUMN_DEVICEID TEXT '
         ',$COLUMN_LATITUDE TEXT,$COLUMN_LONGITUDE TEXT, $COLUMN_TIMESTAMP TEXT , $COLUMN_UPLOADED TEXT )');
-    await db.execute('insert into $TABLE_LOCATION select * from tmp ');
+    await db.execute('insert into $TABLE_LOCATION select T1.*,\'\' from tmp as T1 ');
     await db.execute('DROP TABLE tmp ');
     print('_onUpgrade() : end ');
   }
@@ -97,7 +97,12 @@ class DatabaseHelper {
     print(result);
     return result;
   }
-
+  Future<int> updateFlag(LocationModel location) async {
+    var db = await this.database;
+    var result = await db.rawUpdate('UPDATE $TABLE_LOCATION SET $COLUMN_UPLOADED = \'Y\' WHERE $COLUMN_ID = ? ',[location.id]);
+    print('result : $location.id = ' +result.toString());
+    return result;
+  }
   Future<List<LocationModel>> getDetailList(String activityId) async {
     Database db = await this.database;
     var result = await db.rawQuery('SELECT * FROM $TABLE_LOCATION WHERE $COLUMN_ACTIVIY_ID = $activityId');
@@ -144,6 +149,19 @@ class DatabaseHelper {
     return ctr.toString();
   }
 
+  Future<List<LocationModel>> getPending() async {
 
+    Database db = await this.database;
+    var result = await db.rawQuery('SELECT * FROM $TABLE_LOCATION  WHERE $COLUMN_UPLOADED = \'\'  OR $COLUMN_UPLOADED IS NULL');
+   // print(result);
+    int count = result.length;         // Count the number of map entries in db table
+    List<LocationModel> list = List<LocationModel>();
+    // For loop to create a 'Note List' from a 'Map List'
+    for (int i = 0; i < count; i++) {
+      //print('result[i]' +result[i].toString()); //for debugging
+      list.add(LocationModel.fromMap(result[i]));
+    }
+    return list;
+  }
 
 }

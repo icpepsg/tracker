@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -7,12 +9,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:tracker/src/common/Constants.dart';
+import 'package:tracker/src/model/apiModel.dart';
 import 'package:tracker/src/model/location_model.dart';
+import 'package:tracker/src/model/tracker_model.dart';
 import 'package:tracker/src/service/DatabaseHelper.dart';
 import 'package:tracker/src/service/marker_service.dart';
 import 'package:screen/screen.dart';
-
+import 'package:http/http.dart' as http;
 class MapPage extends StatefulWidget {
 
   const MapPage({Key key}) : super(key: key);
@@ -25,6 +30,7 @@ Set<Marker> markers = {};
 int _index = 0;
 int indexMarker;
 ValueNotifier valueNotifier = ValueNotifier(indexMarker);
+
 
 class _MapPageState extends State<MapPage> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -48,6 +54,10 @@ class _MapPageState extends State<MapPage> {
   DatabaseHelper helper = DatabaseHelper();
   String maxId ;
   bool incrementFlag;
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  TrackerModel trackerModel = TrackerModel();
+  List<Datalist>  dataList = List<Datalist>();
+
   @override
   void initState() {
     _getIsTrackingActive();
@@ -126,7 +136,7 @@ class _MapPageState extends State<MapPage> {
 
   void getMarkers() async {
     final Uint8List userMarkerIcon =
-    await getBytesFromAsset('assets/images/normal_marker.png', 55);
+    await getBytesFromAsset('assets/images/normal_marker.png', 65);
 
     final Uint8List selectedMarkerIcon =
     await getBytesFromAsset('assets/images/selected_marker.png', 100);
@@ -332,6 +342,7 @@ class _MapPageState extends State<MapPage> {
                                             isTrackingActive=false;
                                             Screen.keepOn(false);
                                             _setIsTrackingActive(isTrackingActive);
+                                            submitData();
                                           });
                                         },
                                         borderSide: BorderSide(color: Colors.pink[100],width: 3),
@@ -505,6 +516,54 @@ class _MapPageState extends State<MapPage> {
   }
 
 //***************************************************************
+  void submitData()  {
+     print('submitData()');
+     LocationModel locModel = LocationModel();
+
+
+     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+     dbFuture.then((database) {
+       Future<List<LocationModel>> listFuture = databaseHelper.getPending();
+       listFuture.then((list) {
+         List<LocationModel> locList = list;
+         int count = locList.length;
+         print('Count = ' +count.toString());
+         for (int i = 0; i < count; i++) {
+           trackerModel.deviceId = locList[i].deviceId;
+           Datalist list = Datalist();
+           list.activityId = "1";
+           list.longitude = locList[i].longitude;
+           list.latitude = locList[i].latitude;
+           list.createdatetime = locList[i].timestamp;
+           //print(list.createdatetime.toString());
+           //print(locList[i].id.toString() + ' : ' + locList[i].deviceId + ' : ' + locList[i].longitude + ' : ' + locList[i].latitude+ ' : ' + locList[i].timestamp);
+           dataList.add(list);
+         }
+         trackerModel.datalist = dataList;
+         //List<Datalist> list = trackerModel.datalist;
+         httpCall().then((value) {
+           print(value.body.toString());
+           Map map = jsonDecode(value.body);
+           var data = ApiModel.fromJson(map);
+           if(data.success){
+             for (int i = 0; i < count; i++) {
+               Future<int> listFuture = databaseHelper.updateFlag(locList[i]);
+
+             }
+           }//if true the update all record
+         });
+         });
+       });
+
+  }
+
+  Future<http.Response> httpCall() async {
+    print(' httpCall() ' +trackerModel.deviceId.toString());
+    final resp = await http.post(Constants.API_URL_LOG,
+        headers: {"Content-Type": "application/json"},
+        body: trackerModelToJson(trackerModel));
+    return resp;
+  }
 
   //***********************************************************************
 

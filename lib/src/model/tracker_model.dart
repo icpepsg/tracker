@@ -16,7 +16,7 @@ class TrackerModel {
     this.datalist,
   });
 
-  int deviceId;
+  String deviceId;
   bool success;
   String message;
   List<Datalist> datalist;
@@ -47,7 +47,7 @@ class Datalist {
   String activityId;
   String longitude;
   String latitude;
-  DateTime createdatetime;
+  String createdatetime;
 
   factory Datalist.fromJson(Map<String, dynamic> json) => Datalist(
     activityId: json["activity_id"],

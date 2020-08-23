@@ -70,12 +70,19 @@ class _HistoryDetailState extends State<HistoryDetail> {
       itemBuilder: (BuildContext context, int position) {
         int index = locationList[position].activityId;
         index+=1; print('index =>  $index');
+        String uploaded;
+        if (this.locationList[position].uploaded != null){
+          uploaded = "YES";
+        }else{
+          uploaded = "NO";
+        }
+
         return Card(
           color: Colors.white,
           elevation: 4.0,
           child: ListTile(
             title: Text('Activity Log no. ' + index.toString(), style: titleStyle,),
-            subtitle: Text('Lat: ' +this.locationList[position].latitude + '\n Lng: ' +this.locationList[position].longitude +'\n ' +this.locationList[position].timestamp),
+            subtitle: Text('Lat: ' +this.locationList[position].latitude + '\n Lng: ' +this.locationList[position].longitude +'\n ' +this.locationList[position].timestamp +'\n Uploaded : ' +uploaded),
           ),
         );
       },

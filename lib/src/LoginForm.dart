@@ -266,20 +266,19 @@ class _LoginFormState extends State<LoginForm> {
                                     fontWeight: FontWeight.w500,
                                     color: Colors.redAccent)),
                           ),
-                          Container(
-                            child: Column(
-                              children: <Widget>[
-                                //new Text(' '),
-                                SignInButton(
-                                  Buttons.Google,
-
-                                  onPressed: () {
+//                          Container(
+//                            child: Column(
+//                              children: <Widget>[
+//                                //new Text(' '),
+//                                SignInButton(
+//                                  Buttons.Google,
+//                                  onPressed: () {
 // call google sign in here
-                                  },
-                                )
-                              ],
-                            ),
-                          ),
+//                                  },
+ //                               )
+//                              ],
+//                            ),
+//                          ),
                           Container(
                             child: Column(
                               children: <Widget>[
