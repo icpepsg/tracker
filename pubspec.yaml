@@ -47,8 +47,8 @@ dev_dependencies:
 
 
 flutter_icons:
-  image_path_android: "assets/images/ct_logo.png"
-  image_path_ios: "assets/images/ct_logo.png"
+  image_path_android: "assets/images/ctlogo.jpg"
+  image_path_ios: "assets/images/ctlogo.jpg"
   android: true # can specify file name here e.g. "ic_launcher"
   ios: true # can specify file name here e.g. "My-Launcher-Icon"
 
@@ -60,5 +60,6 @@ flutter:
     - assets/images/icpep.png
     - assets/images/direction.png
     - assets/images/ct_logo.png
+    - assets/images/ctlogo.jpg
     - assets/images/normal_marker.png
     - assets/images/selected_marker.png
