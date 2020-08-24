@@ -185,6 +185,7 @@ class _MapPageState extends State<MapPage> {
         locationModel.latitude  = a ;
         locationModel.longitude = b ;
         locationModel.timestamp = DateTime.now().toString();
+        locationModel.uploaded = "";
         insert().then((valueC){
           print('result.int = > ' +valueC.toString());
         });
@@ -556,7 +557,6 @@ class _MapPageState extends State<MapPage> {
        });
 
   }
-
   Future<http.Response> httpCall() async {
     print(' httpCall() ' +trackerModel.deviceId.toString());
     final resp = await http.post(Constants.API_URL_LOG,

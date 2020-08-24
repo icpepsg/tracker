@@ -41,7 +41,7 @@ class DatabaseHelper {
   void _createDB(Database db, int version) async {
     print('_createDB() : ' +version.toString());
     await db.execute('CREATE TABLE $TABLE_LOCATION($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_ACTIVIY_ID INTEGER , $COLUMN_DEVICEID TEXT '
-                    ',$COLUMN_LATITUDE TEXT,$COLUMN_LONGITUDE TEXT, $COLUMN_TIMESTAMP TEXT )');
+                    ',$COLUMN_LATITUDE TEXT,$COLUMN_LONGITUDE TEXT, $COLUMN_TIMESTAMP TEXT, $COLUMN_UPLOADED TEXT )');
   }
   void _onUpgrade(Database db, int oldVersion, int newVersion) async{
     print('_onUpgrade() : ' + oldVersion.toString() +' : ' +newVersion.toString() );

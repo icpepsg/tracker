@@ -72,9 +72,9 @@ class _HistoryDetailState extends State<HistoryDetail> {
         index+=1; print('index =>  $index');
         String uploaded;
         if (this.locationList[position].uploaded != null){
-          uploaded = "YES";
+          uploaded = "Yes";
         }else{
-          uploaded = "NO";
+          uploaded = "Pending";
         }
 
         return Card(
@@ -82,7 +82,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
           elevation: 4.0,
           child: ListTile(
             title: Text('Activity Log no. ' + index.toString(), style: titleStyle,),
-            subtitle: Text('Lat: ' +this.locationList[position].latitude + '\n Lng: ' +this.locationList[position].longitude +'\n ' +this.locationList[position].timestamp +'\n Uploaded : ' +uploaded),
+            subtitle: Text('Lat: ' +this.locationList[position].latitude + '\nLng: ' +this.locationList[position].longitude +'\nTime:' +this.locationList[position].timestamp +'\nUploaded: ' +uploaded),
           ),
         );
       },
