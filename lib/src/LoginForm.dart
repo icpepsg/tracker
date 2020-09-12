@@ -16,6 +16,7 @@ import 'package:tracker/src/customwidget/CustomButton.dart';
 import 'package:tracker/src/customwidget/ImageContainer.dart';
 import 'package:tracker/src/model/FbModel.dart';
 import 'package:tracker/src/model/UserModel.dart';
+import 'package:tracker/src/password_reset.dart';
 import 'package:tracker/src/service/login_service.dart';
 import 'package:http/http.dart' as http;
 class LoginForm extends StatefulWidget {
@@ -115,6 +116,31 @@ class _LoginFormState extends State<LoginForm> {
             },
             child: Text(
               Constants.TXT_LABEL_REGISTER,
+              style: TextStyle(
+                  color: Colors.red,
+                  fontSize: fontSize,
+                  fontWeight: FontWeight.w600),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _resetPasswordLabel(double fontSize) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 20),
+      alignment: Alignment.bottomCenter,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => PasswordReset()));
+            },
+            child: Text(
+              Constants.TXT_LABEL_FORGOT_PASSWORD,
               style: TextStyle(
                   color: Colors.red,
                   fontSize: fontSize,
@@ -258,13 +284,10 @@ class _LoginFormState extends State<LoginForm> {
                           ),
                           _submitButton(context),
                           Container(
-                            padding: EdgeInsets.symmetric(vertical: 10),
+                            //padding: EdgeInsets.symmetric(vertical: 10),
                             alignment: Alignment.centerRight,
-                            child: Text(Constants.TXT_LABEL_FORGOT_PASSWORD,
-                                style: TextStyle(
-                                    fontSize: labelSize,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.redAccent)),
+                            child: _resetPasswordLabel(labelSize)
+
                           ),
 //                          Container(
 //                            child: Column(

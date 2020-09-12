@@ -30,7 +30,7 @@ class CommonTextWidget extends StatelessWidget {
       errorSize = 10;
       font = 15;
       inset=15;
-      height = MediaQuery.of(context).size.height*0.10;
+      height = MediaQuery.of(context).size.height*0.13;
     }
     return Container(
       height: height,

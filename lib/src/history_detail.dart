@@ -71,7 +71,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
         int index = locationList[position].activityId;
         index+=1; print('index =>  $index');
         String uploaded;
-        if (this.locationList[position].uploaded != null){
+        if (this.locationList[position].uploaded != null || this.locationList[position].uploaded!= ''){
           uploaded = "Yes";
         }else{
           uploaded = "Pending";

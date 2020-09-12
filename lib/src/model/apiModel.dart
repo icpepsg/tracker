@@ -11,11 +11,12 @@ String apiModelToJson(ApiModel data) => json.encode(data.toJson());
 class ApiModel {
   ApiModel({
     this.success,
-    this.message,
+    this.message
   });
 
   bool success;
   String message;
+
 
   factory ApiModel.fromJson(Map<String, dynamic> json) => ApiModel(
     success: json["success"],

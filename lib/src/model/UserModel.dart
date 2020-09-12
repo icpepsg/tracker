@@ -16,10 +16,11 @@ class UserModel {
     this.success,
     this.token,
     // ignore: non_constant_identifier_names
-    this.device_id
+    this.device_id,
+    this.email
 
   });
-
+  String email;
   String username;
   String password;
   String message;
@@ -35,6 +36,7 @@ class UserModel {
     success: json["success"],
     token: json["token"],
     device_id: json["device_id"],
+    email: json["email"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -44,5 +46,6 @@ class UserModel {
     "success": success,
     "token": token,
     "device_id": device_id,
+    "email":email,
   };
 }
