@@ -1,4 +1,4 @@
-package com.icpepsga.tracker;
+package com.icpepsgapp.tracker;
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity;
